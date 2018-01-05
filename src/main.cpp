@@ -1,9 +1,9 @@
 #include <ncurses.h>
 #include <version.h>
 
-bool running = true;
-int MAX_X, MAX_Y;
-int CURR_X = 0, CURR_Y = 0;
+#include <file.hpp>
+#include <runtime.hpp>
+#include <screen.hpp>
 
 int main(int argc, char* argv[])
 {
@@ -11,18 +11,20 @@ int main(int argc, char* argv[])
     initscr();
     noecho();
     raw();
+    keypad(stdscr, TRUE);
 
-    while (running) {
-        char keypress = getch();
+    // Initialize the line buffer for the file
+    Djinni::File buffer = Djinni::File("Untitled");
+    Djinni::Screen::current_buffer = &buffer;
 
-        switch (keypress) {
-        case 27:
-            running = false;
-            break;
-        default:
-            continue;
-        }
+    while (Djinni::Runtime::running) {
+
+        Djinni::Screen::update_screen();
+
+        int keypress = getch();
+        Djinni::Screen::handle_keypress(keypress);
     }
+
     // End the program
     endwin();
 }

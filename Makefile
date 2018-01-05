@@ -1,7 +1,10 @@
-C_FILES=src/main.cpp
+SOURCE_FILES=src/file.cpp src/screen.cpp src/runtime.cpp
+SOURCE_OBJ=file.o screen.o runtime.o
+C_MAIN=src/main.cpp 
+TEST_MAIN=tests/test_main.cpp
 C_FLAGS=-std=c++11 -lncurses -Wall -Wextra -Iinclude
 CC=g++
-NAME=out
+NAME=djinni
 
 include version.mk
 
@@ -10,11 +13,11 @@ include version.mk
 all: build
 
 build: 
-	$(CC) -o bin/$(NAME) $(C_FILES) $(C_FLAGS)
+	$(CC) -o bin/$(NAME) $(C_MAIN) $(SOURCE_FILES) $(C_FLAGS)
 
 test:
-	$(CC) $(C_FLAGS) -c tests/test_main.cpp
-	$(CC) $(C_FLAGS) -o bin/tests test_main.o && bin/tests --success
+	$(CC) $(C_FLAGS) -c $(TEST_MAIN) $(SOURCE_FILES)
+	$(CC) $(C_FLAGS) -o bin/tests test_main.o $(SOURCE_OBJ) && bin/tests --success
 	rm *.o
 
 install:
