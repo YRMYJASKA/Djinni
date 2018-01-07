@@ -43,7 +43,7 @@ void Djinni::Screen::update_screen()
 
     // Print the bottom information screen (very minimal and not final)
     mvprintw(MAX_Y - 1, 0, "%s   ", current_buffer->get_filename().c_str());
-    printw("%d, %d", current_buffer->cursor_x, current_buffer->cursor_y);
+    printw("%d, %d", current_buffer->cursor_x + 1, current_buffer->cursor_y + 1);
 
     // Move the cursor to it's correct place and refresh the screen
     move(current_buffer->cursor_y - Djinni::Runtime::line_offset, current_buffer->cursor_x + Djinni::Runtime::line_digits + 3);

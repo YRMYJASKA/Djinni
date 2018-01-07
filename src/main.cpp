@@ -12,13 +12,21 @@ int main(int argc, char* argv[])
     noecho();
     raw();
     keypad(stdscr, TRUE);
-	start_color();
+    start_color();
+
+    Djinni::File buffer;
+
+    if (argv[1]) {
+        buffer.set_filename(argv[1]);
+    } else {
+        buffer.set_filename("Untitled");
+    }
 
     // Initialize the line buffer for the file
-    Djinni::File buffer = Djinni::File("Untitled");
+    buffer.load_file(buffer.get_filename());
     Djinni::Screen::current_buffer = &buffer;
 
-	// The main loop
+    // The main loop
     while (Djinni::Runtime::running) {
 
         Djinni::Screen::update_screen();
