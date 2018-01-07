@@ -12,8 +12,8 @@ class File {
     std::vector<std::string> line_buffer;
     unsigned int cursor_x, cursor_y;
 
-    std::string getFilename();
-    void setFilename(std::string filename);
+    std::string get_filename();
+    void set_filename(std::string filename);
 
     private:
     std::string filename;

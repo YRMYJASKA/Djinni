@@ -1,26 +1,54 @@
 #include <ncurses.h>
 
+#include <miscellaneous.hpp>
 #include <runtime.hpp>
 #include <screen.hpp>
+#include <settings.hpp>
 
 namespace Djinni::Screen {
-int MAX_X = 0;
-int MAX_Y = 0;
+unsigned int MAX_X = 0;
+unsigned int MAX_Y = 0;
 File* current_buffer = NULL;
 }
 using namespace Djinni::Screen;
 
 void Djinni::Screen::update_screen()
 {
+    // Clear screen before editing and get window size
     erase();
     getmaxyx(stdscr, MAX_Y, MAX_X);
-	// Debugging purposes
-    // mvprintw(20, 20, "x:%d, y:%d", current_buffer->cursor_x, current_buffer->cursor_y);
-    for (unsigned int i = 0; i < current_buffer->line_buffer.size(); i++) {
-        mvprintw(i, 0, "%s", current_buffer->line_buffer[i].c_str());
+
+    // Proper formatting so line numbers won't mess up the other text
+    if (Djinni::Settings::line_numbers) {
+        Djinni::Runtime::line_digits = Djinni::Miscellaneous::digit_num(current_buffer->line_buffer.size());
     }
+
+    if (current_buffer->cursor_y - (MAX_Y - 3) > Djinni::Runtime::line_offset && current_buffer->cursor_y > MAX_Y - 3) {
+        Djinni::Runtime::line_offset = current_buffer->cursor_y - (MAX_Y - 3);
+    } else if (current_buffer->cursor_y < Djinni::Runtime::line_offset) {
+        Djinni::Runtime::line_offset--;
+    }
+
+    // Print the lines in the bufffer onto the screen
+    int x = Djinni::Runtime::line_offset;
+    for (unsigned int i = 0; (i < MAX_Y - 2 && i + Djinni::Runtime::line_offset < current_buffer->line_buffer.size()); i++) {
+
+        if (Djinni::Settings::line_numbers) {
+            mvprintw(i, 1, "%d", i + Djinni::Runtime::line_offset + 1);
+        }
+        mvprintw(i, Djinni::Runtime::line_digits + 2, "%c", ' ');
+        mvprintw(i, Djinni::Runtime::line_digits + 3, "%s", current_buffer->line_buffer[i + Djinni::Runtime::line_offset].c_str());
+        x++;
+    }
+
+    // Print the bottom information screen (very minimal and not final)
+    mvprintw(MAX_Y - 1, 0, "%s   ", current_buffer->get_filename().c_str());
+    printw("%d, %d", current_buffer->cursor_x, current_buffer->cursor_y);
+
     // Move the cursor to it's correct place and refresh the screen
-    move(current_buffer->cursor_y, current_buffer->cursor_x);
+    move(current_buffer->cursor_y - Djinni::Runtime::line_offset, current_buffer->cursor_x + Djinni::Runtime::line_digits + 3);
+
+    // Finally print all the changes onto the screen
     refresh();
 }
 

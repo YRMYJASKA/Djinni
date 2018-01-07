@@ -13,6 +13,6 @@ Djinni::File::File(std::string filename)
     this->filename = filename;
 }
 
-std::string Djinni::File::getFilename() { return this->filename; }
+std::string Djinni::File::get_filename() { return this->filename; }
 
-void Djinni::File::setFilename(std::string filename) { this->filename = filename; }
+void Djinni::File::set_filename(std::string filename) { this->filename = filename; }

@@ -12,11 +12,13 @@ int main(int argc, char* argv[])
     noecho();
     raw();
     keypad(stdscr, TRUE);
+	start_color();
 
     // Initialize the line buffer for the file
     Djinni::File buffer = Djinni::File("Untitled");
     Djinni::Screen::current_buffer = &buffer;
 
+	// The main loop
     while (Djinni::Runtime::running) {
 
         Djinni::Screen::update_screen();

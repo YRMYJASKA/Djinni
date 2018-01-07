@@ -8,7 +8,7 @@
 namespace Djinni::Screen {
 
 // Important variables
-extern int MAX_X, MAX_Y;
+extern unsigned int MAX_X, MAX_Y;
 extern File* current_buffer;
 
 extern void update_screen();

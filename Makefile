@@ -1,5 +1,5 @@
-SOURCE_FILES=src/file.cpp src/screen.cpp src/runtime.cpp
-SOURCE_OBJ=file.o screen.o runtime.o
+SOURCE_FILES=src/file.cpp src/screen.cpp src/runtime.cpp src/settings.cpp src/miscellaneous.cpp
+SOURCE_OBJ=file.o screen.o runtime.o settings.o miscellaneous.o
 C_MAIN=src/main.cpp 
 TEST_MAIN=tests/test_main.cpp
 C_FLAGS=-std=c++11 -lncurses -Wall -Wextra -Iinclude
@@ -25,11 +25,11 @@ install:
 
 # Echo the version numbers into version.h 
 update_version: 
-	echo "#pragma once" > src/include/version.h
-	echo "#define VERSION_MAJOR $(VERSION_MAJOR)" >> src/include/version.h
-	echo "#define VERSION_MINOR $(VERSION_MINOR)" >> src/include/version.h
-	echo "#define VERSION_PATCH $(VERSION_PATCH)" >> src/include/version.h
-	echo 'static const char* VERSION_STRING = "$(VERSION_STRING)";' >> src/include/version.h
+	echo "#pragma once" > include/version.h
+	echo "#define VERSION_MAJOR $(VERSION_MAJOR)" >> include/version.h
+	echo "#define VERSION_MINOR $(VERSION_MINOR)" >> include/version.h
+	echo "#define VERSION_PATCH $(VERSION_PATCH)" >> include/version.h
+	echo 'static const char* VERSION_STRING = "$(VERSION_STRING)";' >> include/version.h
 
 clean:
 	rm bin/*
