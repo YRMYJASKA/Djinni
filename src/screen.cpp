@@ -5,10 +5,12 @@
 #include <screen.hpp>
 #include <settings.hpp>
 
-namespace Djinni::Screen {
-unsigned int MAX_X = 0;
-unsigned int MAX_Y = 0;
-File* current_buffer = NULL;
+namespace Djinni {
+namespace Screen {
+    unsigned int MAX_X = 0;
+    unsigned int MAX_Y = 0;
+    File* current_buffer = NULL;
+}
 }
 using namespace Djinni::Screen;
 

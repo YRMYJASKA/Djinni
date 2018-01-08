@@ -8,7 +8,8 @@
 
 TEST_CASE("Testing the File class", "[File]")
 {
-    Djinni::File testFile1("Filename");
+    Djinni::File testFile1;
+	testFile1.set_filename("filename");
 
     testFile1.line_buffer[0] = "TestLine1";
 

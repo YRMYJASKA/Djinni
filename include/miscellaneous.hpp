@@ -1,5 +1,8 @@
 #pragma once
 
-namespace Djinni::Miscellaneous{
-extern int digit_num(int x);
+namespace Djinni {
+namespace Miscellaneous {
+    extern int digit_num(int x);
+    extern void print_help();
+}
 }
