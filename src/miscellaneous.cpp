@@ -30,7 +30,6 @@ void Djinni::Miscellaneous::print_help()
     std::cout << '\n';
     std::cout << "Key in Djinni:" << '\n';
     std::cout << "<ctrl>B: 			Quit Djinni" << '\n';
-    std::cout << "<ctrl>F:			Open a file" << '\n';
     std::cout << "<ctrl>S:			Save current file" << '\n';
     std::cout << "<ctrl>D:			Open shell" << '\n';
 }

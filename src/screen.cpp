@@ -1,5 +1,6 @@
 #include <ncurses.h>
 
+#include <cmdline.hpp>
 #include <miscellaneous.hpp>
 #include <runtime.hpp>
 #include <screen.hpp>
@@ -56,11 +57,20 @@ void Djinni::Screen::update_screen()
 
 void Djinni::Screen::handle_keypress(int key)
 {
+
     switch (key) {
-    case 27: // ESC key
+    // Ctrl-B pressed -> close the program
+    case 2:
         Djinni::Runtime::running = false;
         break;
-
+    // Ctrl-S -> save the file
+    case 19:
+		current_buffer->save_file(current_buffer->get_filename());
+        break;
+	// Ctrl-D -> Open command line for Djinni
+	case 4:
+		Djinni::Commandline::init_commandline();
+		break;
     case int('\n'): // Enter key
         // Insert a new line
         current_buffer->line_buffer.insert(current_buffer->line_buffer.begin() + 1 + current_buffer->cursor_y, "");
@@ -121,6 +131,11 @@ void Djinni::Screen::handle_keypress(int key)
         break;
 
     default:
+        // Quick fix to prevent non-printable characters from being printed
+        if (key < 32) {
+            break;
+        }
+
         // Insert the pressed key into the correct position on the line
         current_buffer->line_buffer.at(current_buffer->cursor_y).insert(current_buffer->cursor_x, 1, key);
         current_buffer->cursor_x++;
