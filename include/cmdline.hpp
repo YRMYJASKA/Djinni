@@ -14,3 +14,4 @@ namespace Commandline {
     extern void commandline_routine();
     extern void process_command(const char* cmd);
 }
+}

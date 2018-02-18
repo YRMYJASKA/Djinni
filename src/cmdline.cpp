@@ -114,4 +114,3 @@ void Djinni::Commandline::commandline_routine()
         }
     }
 }
-}

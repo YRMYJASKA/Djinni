@@ -145,4 +145,3 @@ void Djinni::Screen::handle_keypress(int key)
         current_buffer->cursor_x++;
     }
 }
-}
