@@ -8,10 +8,9 @@ namespace Commandline {
     extern std::string command;
     extern std::string echo;
     extern int cmdline_cursor_pos;
-	extern bool cmdline_running;
+    extern bool cmdline_running;
 
     extern void init_commandline();
     extern void commandline_routine();
-    extern void process_command(std::string cmd);
-}
+    extern void process_command(const char* cmd);
 }

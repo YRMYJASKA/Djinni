@@ -48,6 +48,9 @@ void Djinni::Screen::update_screen()
     mvprintw(MAX_Y - 1, 0, "%s   ", current_buffer->get_filename().c_str());
     printw("%d, %d", current_buffer->cursor_x + 1, current_buffer->cursor_y + 1);
 
+    // Print the last output of the command line
+    mvprintw(MAX_Y - 2, 0, "%s", Djinni::Commandline::echo.c_str());
+
     // Move the cursor to it's correct place and refresh the screen
     move(current_buffer->cursor_y - Djinni::Runtime::line_offset, current_buffer->cursor_x + Djinni::Runtime::line_digits + 3);
 
@@ -55,6 +58,7 @@ void Djinni::Screen::update_screen()
     refresh();
 }
 
+// "Main" function the whole program
 void Djinni::Screen::handle_keypress(int key)
 {
 
@@ -65,12 +69,12 @@ void Djinni::Screen::handle_keypress(int key)
         break;
     // Ctrl-S -> save the file
     case 19:
-		current_buffer->save_file(current_buffer->get_filename());
+        current_buffer->save_file(current_buffer->get_filename());
         break;
-	// Ctrl-D -> Open command line for Djinni
-	case 4:
-		Djinni::Commandline::init_commandline();
-		break;
+    // Ctrl-D -> Open command line for Djinni
+    case 4:
+        Djinni::Commandline::init_commandline();
+        break;
     case int('\n'): // Enter key
         // Insert a new line
         current_buffer->line_buffer.insert(current_buffer->line_buffer.begin() + 1 + current_buffer->cursor_y, "");
@@ -140,4 +144,5 @@ void Djinni::Screen::handle_keypress(int key)
         current_buffer->line_buffer.at(current_buffer->cursor_y).insert(current_buffer->cursor_x, 1, key);
         current_buffer->cursor_x++;
     }
+}
 }

@@ -1,5 +1,6 @@
 #include <ncurses.h>
 #include <string>
+#include <vector>
 
 #include <cmdline.hpp>
 #include <screen.hpp>
@@ -12,9 +13,10 @@ namespace Commandline {
     int cmdline_cursor_pos = 0;
     bool cmdline_running = true;
 
+    // Functions for the command line
     void init_commandline();
     void commandline_routine();
-    void process_command(std::string cmd);
+    void process_command(const char* cmd);
 }
 }
 
@@ -30,10 +32,31 @@ void Djinni::Commandline::init_commandline()
     Djinni::Commandline::commandline_routine();
 }
 
-void Djinni::Commandline::process_command(std::string cmd)
+void Djinni::Commandline::process_command(const char* cmd)
 {
     // TODO
-	cmdline_running = false;
+    std::vector<std::string> tokens;
+
+    // Split the command into tokens
+    std::string buffer = "";
+
+    for (int i = 0; cmd[i] != '\0'; i++) {
+        if (cmd[i] == ' ') {
+            // Split if whitespace
+
+            // Check that the buffer isn't empty to prevent empty arguments
+            if (buffer != "") {
+                tokens.push_back(buffer);
+            }
+            buffer = "";
+        } else {
+            // Otherwise, add buffer
+            buffer += cmd[i];
+        }
+    }
+    tokens.push_back(buffer);
+
+    cmdline_running = false;
 }
 
 void Djinni::Commandline::commandline_routine()
@@ -52,14 +75,14 @@ void Djinni::Commandline::commandline_routine()
         // Get user's input and process it
         int k = getch();
         switch (k) {
-       	// ESC || Ctrl-B -> close command line
+        // ESC || Ctrl-B -> close command line
         case 2:
         case 27:
             cmdline_running = false;
             break;
         // Enter key -> process command
         case int('\n'):
-            process_command(command);
+            process_command(command.c_str());
             break;
         // Backspace -> delete letter before
         case 127:
@@ -90,4 +113,5 @@ void Djinni::Commandline::commandline_routine()
             cmdline_cursor_pos++;
         }
     }
+}
 }

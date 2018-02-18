@@ -2,7 +2,7 @@ SOURCE_FILES=src/cmdline.cpp src/file.cpp src/screen.cpp src/runtime.cpp src/set
 SOURCE_OBJ=cmdline.o file.o screen.o runtime.o settings.o miscellaneous.o
 C_MAIN=src/main.cpp 
 TEST_MAIN=tests/test_main.cpp
-C_FLAGS=-std=c++11 -lncurses -Wall -Wextra -Iinclude
+C_FLAGS=-std=c++11 -lncurses -Wall -Wextra -Iinclude -ferror-limit=1000
 CC=clang++
 NAME=djinni
 
