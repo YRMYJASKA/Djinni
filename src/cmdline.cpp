@@ -4,19 +4,20 @@
 
 #include <cmdline.hpp>
 #include <screen.hpp>
+#include <runtime.hpp>
 
 namespace Djinni {
 namespace Commandline {
     // Variables for the command line
     std::string command = "";
-    std::string echo = "";
-    int cmdline_cursor_pos = 0;
+    unsigned int cmdline_cursor_pos = 0;
     bool cmdline_running = true;
 
     // Functions for the command line
     void init_commandline();
     void commandline_routine();
     void process_command(const char* cmd);
+    void exec_command(std::string* args, int size);
 }
 }
 
@@ -25,6 +26,7 @@ void Djinni::Commandline::init_commandline()
 {
     // Set all the variables to default values
     command = "";
+	Djinni::Runtime::echo = "";
     cmdline_cursor_pos = 0;
     cmdline_running = true;
 
@@ -56,7 +58,18 @@ void Djinni::Commandline::process_command(const char* cmd)
     }
     tokens.push_back(buffer);
 
+    if (tokens[0] == "") {
+        // Command was empty and do nothing
+    } else {
+        // Execute the command given
+        exec_command(&tokens[0], tokens.size());
+    }
     cmdline_running = false;
+}
+
+void Djinni::Commandline::exec_command(std::string* args, int size)
+{
+    // TODO
 }
 
 void Djinni::Commandline::commandline_routine()

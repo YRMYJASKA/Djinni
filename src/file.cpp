@@ -52,7 +52,7 @@ void Djinni::File::save_file(std::string filename)
     if (!_file.is_open()) {
         // TODO: Erro handling for not being ale to write to file
     } else {
-        for (int i = 0; i < this->line_buffer.size(); i++) {
+        for (unsigned int i = 0; i < this->line_buffer.size(); i++) {
             _file << this->line_buffer[i] << '\n';
         }
     }

@@ -49,7 +49,7 @@ void Djinni::Screen::update_screen()
     printw("%d, %d", current_buffer->cursor_x + 1, current_buffer->cursor_y + 1);
 
     // Print the last output of the command line
-    mvprintw(MAX_Y - 2, 0, "%s", Djinni::Commandline::echo.c_str());
+    mvprintw(MAX_Y - 2, 0, "%s", Djinni::Runtime::echo.c_str());
 
     // Move the cursor to it's correct place and refresh the screen
     move(current_buffer->cursor_y - Djinni::Runtime::line_offset, current_buffer->cursor_x + Djinni::Runtime::line_digits + 3);
