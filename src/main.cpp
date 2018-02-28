@@ -11,6 +11,7 @@
 
 int main(int argc, char* argv[])
 {
+    // Create the buffer for the text.
     Djinni::File buffer;
 
     // Handle the command line arguments (not final)
@@ -41,9 +42,10 @@ int main(int argc, char* argv[])
 
     // The main loop
     while (Djinni::Runtime::running) {
-
+		// Refresh the screen
         Djinni::Screen::update_screen();
 
+		// Get and handle any key press from the user
         int keypress = getch();
         Djinni::Screen::handle_keypress(keypress);
     }
