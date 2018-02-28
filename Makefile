@@ -32,4 +32,4 @@ update_version:
 	echo 'static const char* VERSION_STRING = "$(VERSION_STRING)";' >> include/version.h
 
 clean:
-	rm bin/*
+	rm -r bin
