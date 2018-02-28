@@ -29,3 +29,16 @@ Terminal text editor for Linux
 ``` bin/djinni ```
 
 # Contributing
+## Code
+When contributing code please make your commit messages clear and articulate yourself.
+
+**ALL** Source code in C++ should be formatted according to the WebKit format.
+See other .cpp files to see how they are structured. Please try and include as much comments as needed but not too much.
+
+## Wiki
+See the wiki guidelines [here!](../../wiki)
+## Trello
+[The Trello board](https://trello.com/b/6fvZ7hgc/djinni-editor)
+
+# License
+The Djinni text editor is under MIT license. See it [here](LICENSE)
