@@ -13,7 +13,7 @@
 
 namespace Djinni {
 class File {
-    public:
+public:
     File();
 
     std::vector<std::string> line_buffer;
@@ -25,7 +25,7 @@ class File {
     void load_file(std::string filename);
     void save_file(std::string fielname);
 
-    private:
+private:
     std::string filename;
 };
 }

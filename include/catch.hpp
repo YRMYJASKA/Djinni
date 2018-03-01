@@ -202,7 +202,8 @@
 namespace Catch {
 
 struct CaseSensitive {
-    enum Choice { Yes, No };
+    enum Choice { Yes,
+        No };
 };
 
 class NonCopyable {
@@ -211,7 +212,7 @@ class NonCopyable {
     NonCopyable& operator=(NonCopyable const&) = delete;
     NonCopyable& operator=(NonCopyable&&) = delete;
 
-    protected:
+protected:
     NonCopyable();
     virtual ~NonCopyable();
 };
@@ -266,9 +267,9 @@ struct RegistrarForTagAliases {
 
 } // end namespace Catch
 
-#define CATCH_REGISTER_TAG_ALIAS(alias, spec)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          \
-    namespace {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \
-        Catch::RegistrarForTagAliases INTERNAL_CATCH_UNIQUE_NAME(AutoRegisterTagAlias)(alias, spec, CATCH_INTERNAL_LINEINFO);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          \
+#define CATCH_REGISTER_TAG_ALIAS(alias, spec)                                                                                 \
+    namespace {                                                                                                               \
+        Catch::RegistrarForTagAliases INTERNAL_CATCH_UNIQUE_NAME(AutoRegisterTagAlias)(alias, spec, CATCH_INTERNAL_LINEINFO); \
     }
 
 // end catch_tag_alias_autoregistrar.h
@@ -334,7 +335,7 @@ class StringRef {
 
     void takeOwnership();
 
-    public: // construction/ assignment
+public: // construction/ assignment
     StringRef() noexcept;
     StringRef(StringRef const& other) noexcept;
     StringRef(StringRef&& other) noexcept;
@@ -348,22 +349,22 @@ class StringRef {
 
     void swap(StringRef& other) noexcept;
 
-    public: // operators
+public: // operators
     auto operator==(StringRef const& other) const noexcept -> bool;
     auto operator!=(StringRef const& other) const noexcept -> bool;
 
     auto operator[](size_type index) const noexcept -> char;
 
-    public: // named queries
+public: // named queries
     auto empty() const noexcept -> bool;
     auto size() const noexcept -> size_type;
     auto numberOfCharacters() const noexcept -> size_type;
     auto c_str() const -> char const*;
 
-    public: // substrings and searches
+public: // substrings and searches
     auto substr(size_type start, size_type size) const noexcept -> StringRef;
 
-    private: // ownership queries - may not be consistent between calls
+private: // ownership queries - may not be consistent between calls
     auto isOwned() const noexcept -> bool;
     auto isSubstring() const noexcept -> bool;
     auto data() const noexcept -> char const*;
@@ -384,7 +385,7 @@ template <typename C>
 class TestInvokerAsMethod : public ITestInvoker {
     void (C::*m_testAsMethod)();
 
-    public:
+public:
     TestInvokerAsMethod(void (C::*testAsMethod)()) noexcept
         : m_testAsMethod(testAsMethod)
     {
@@ -420,52 +421,52 @@ struct AutoReg : NonCopyable {
 
 #if defined(CATCH_CONFIG_DISABLE)
 #define INTERNAL_CATCH_TESTCASE_NO_REGISTRATION(TestName, ...) static void TestName()
-#define INTERNAL_CATCH_TESTCASE_METHOD_NO_REGISTRATION(TestName, ClassName, ...)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       \
-    namespace {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \
-        struct TestName : ClassName {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  \
-            void test();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               \
-        };                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             \
-    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  \
+#define INTERNAL_CATCH_TESTCASE_METHOD_NO_REGISTRATION(TestName, ClassName, ...) \
+    namespace {                                                                  \
+        struct TestName : ClassName {                                            \
+            void test();                                                         \
+        };                                                                       \
+    }                                                                            \
     void TestName::test()
 
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-#define INTERNAL_CATCH_TESTCASE2(TestName, ...)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \
-    static void TestName();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            \
-    CATCH_INTERNAL_SUPPRESS_GLOBALS_WARNINGS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           \
-    namespace {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \
-        Catch::AutoReg INTERNAL_CATCH_UNIQUE_NAME(autoRegistrar)(Catch::makeTestInvoker(&TestName), CATCH_INTERNAL_LINEINFO, "", Catch::NameAndTags{ __VA_ARGS__ });                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   \
-    } /* NOLINT */                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     \
-    CATCH_INTERNAL_UNSUPPRESS_GLOBALS_WARNINGS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         \
+#define INTERNAL_CATCH_TESTCASE2(TestName, ...)                                                                                                                      \
+    static void TestName();                                                                                                                                          \
+    CATCH_INTERNAL_SUPPRESS_GLOBALS_WARNINGS                                                                                                                         \
+    namespace {                                                                                                                                                      \
+        Catch::AutoReg INTERNAL_CATCH_UNIQUE_NAME(autoRegistrar)(Catch::makeTestInvoker(&TestName), CATCH_INTERNAL_LINEINFO, "", Catch::NameAndTags{ __VA_ARGS__ }); \
+    } /* NOLINT */                                                                                                                                                   \
+    CATCH_INTERNAL_UNSUPPRESS_GLOBALS_WARNINGS                                                                                                                       \
     static void TestName()
 #define INTERNAL_CATCH_TESTCASE(...) INTERNAL_CATCH_TESTCASE2(INTERNAL_CATCH_UNIQUE_NAME(____C_A_T_C_H____T_E_S_T____), __VA_ARGS__)
 
 ///////////////////////////////////////////////////////////////////////////////
-#define INTERNAL_CATCH_METHOD_AS_TEST_CASE(QualifiedMethod, ...)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       \
-    CATCH_INTERNAL_SUPPRESS_GLOBALS_WARNINGS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           \
-    namespace {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \
-        Catch::AutoReg INTERNAL_CATCH_UNIQUE_NAME(autoRegistrar)(Catch::makeTestInvoker(&QualifiedMethod), CATCH_INTERNAL_LINEINFO, "&" #QualifiedMethod, Catch::NameAndTags{ __VA_ARGS__ });                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          \
-    } /* NOLINT */                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     \
+#define INTERNAL_CATCH_METHOD_AS_TEST_CASE(QualifiedMethod, ...)                                                                                                                              \
+    CATCH_INTERNAL_SUPPRESS_GLOBALS_WARNINGS                                                                                                                                                  \
+    namespace {                                                                                                                                                                               \
+        Catch::AutoReg INTERNAL_CATCH_UNIQUE_NAME(autoRegistrar)(Catch::makeTestInvoker(&QualifiedMethod), CATCH_INTERNAL_LINEINFO, "&" #QualifiedMethod, Catch::NameAndTags{ __VA_ARGS__ }); \
+    } /* NOLINT */                                                                                                                                                                            \
     CATCH_INTERNAL_UNSUPPRESS_GLOBALS_WARNINGS
 
 ///////////////////////////////////////////////////////////////////////////////
-#define INTERNAL_CATCH_TEST_CASE_METHOD2(TestName, ClassName, ...)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     \
-    CATCH_INTERNAL_SUPPRESS_GLOBALS_WARNINGS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           \
-    namespace {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \
-        struct TestName : ClassName {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  \
-            void test();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               \
-        };                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             \
-        Catch::AutoReg INTERNAL_CATCH_UNIQUE_NAME(autoRegistrar)(Catch::makeTestInvoker(&TestName::test), CATCH_INTERNAL_LINEINFO, #ClassName, Catch::NameAndTags{ __VA_ARGS__ }); /* NOLINT */                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \
-    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  \
-    CATCH_INTERNAL_UNSUPPRESS_GLOBALS_WARNINGS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         \
+#define INTERNAL_CATCH_TEST_CASE_METHOD2(TestName, ClassName, ...)                                                                                                                              \
+    CATCH_INTERNAL_SUPPRESS_GLOBALS_WARNINGS                                                                                                                                                    \
+    namespace {                                                                                                                                                                                 \
+        struct TestName : ClassName {                                                                                                                                                           \
+            void test();                                                                                                                                                                        \
+        };                                                                                                                                                                                      \
+        Catch::AutoReg INTERNAL_CATCH_UNIQUE_NAME(autoRegistrar)(Catch::makeTestInvoker(&TestName::test), CATCH_INTERNAL_LINEINFO, #ClassName, Catch::NameAndTags{ __VA_ARGS__ }); /* NOLINT */ \
+    }                                                                                                                                                                                           \
+    CATCH_INTERNAL_UNSUPPRESS_GLOBALS_WARNINGS                                                                                                                                                  \
     void TestName::test()
 #define INTERNAL_CATCH_TEST_CASE_METHOD(ClassName, ...) INTERNAL_CATCH_TEST_CASE_METHOD2(INTERNAL_CATCH_UNIQUE_NAME(____C_A_T_C_H____T_E_S_T____), ClassName, __VA_ARGS__)
 
 ///////////////////////////////////////////////////////////////////////////////
-#define INTERNAL_CATCH_REGISTER_TESTCASE(Function, ...)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \
-    CATCH_INTERNAL_SUPPRESS_GLOBALS_WARNINGS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           \
-    Catch::AutoReg INTERNAL_CATCH_UNIQUE_NAME(autoRegistrar)(Catch::makeTestInvoker(Function), CATCH_INTERNAL_LINEINFO, "", Catch::NameAndTags{ __VA_ARGS__ }); /* NOLINT */                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           \
+#define INTERNAL_CATCH_REGISTER_TESTCASE(Function, ...)                                                                                                                      \
+    CATCH_INTERNAL_SUPPRESS_GLOBALS_WARNINGS                                                                                                                                 \
+    Catch::AutoReg INTERNAL_CATCH_UNIQUE_NAME(autoRegistrar)(Catch::makeTestInvoker(Function), CATCH_INTERNAL_LINEINFO, "", Catch::NameAndTags{ __VA_ARGS__ }); /* NOLINT */ \
     CATCH_INTERNAL_UNSUPPRESS_GLOBALS_WARNINGS
 
 // end catch_test_registry.h
@@ -498,7 +499,10 @@ void arcSafeRelease(NSObject* obj);
 id performOptionalSelector(id obj, SEL sel);
 
 #if !CATCH_ARC_ENABLED
-inline void arcSafeRelease(NSObject* obj) { [obj release]; }
+inline void arcSafeRelease(NSObject* obj)
+{
+    [obj release];
+}
 inline id performOptionalSelector(id obj, SEL sel)
 {
     if ([obj respondsToSelector:sel])
@@ -508,7 +512,9 @@ inline id performOptionalSelector(id obj, SEL sel)
 #define CATCH_UNSAFE_UNRETAINED
 #define CATCH_ARC_STRONG
 #else
-inline void arcSafeRelease(NSObject*) {}
+inline void arcSafeRelease(NSObject*)
+{
+}
 inline id performOptionalSelector(id obj, SEL sel)
 {
 #ifdef __clang__
@@ -562,7 +568,7 @@ namespace Detail {
         template <typename, typename>
         static auto test(...) -> std::false_type;
 
-public:
+    public:
         static const bool value = decltype(test<std::ostream, const T&>(0))::value;
     };
 
@@ -822,8 +828,7 @@ struct StringMaker<std::tuple<Types...>> {
         std::ostringstream os;
         os << ''
         {
-            '; Detail::TupleElementPrinter<std::tuple<Types...>>::print(tuple, os);
-            os << " }";
+            '; Detail::TupleElementPrinter<std::tuple<Types...>>::print(tuple, os); os << " }";
             return os.str();
         }
     };
@@ -990,7 +995,7 @@ namespace Catch {
 
         void streamReconstructedExpression(std::ostream& os) const override { formatReconstructedExpression(os, Catch::Detail::stringify(m_lhs), m_op, Catch::Detail::stringify(m_rhs)); }
 
-public:
+    public:
         BinaryExpr(bool comparisonResult, LhsT lhs, StringRef op, RhsT rhs)
             : m_result(comparisonResult)
             , m_lhs(lhs)
@@ -1009,7 +1014,7 @@ public:
 
         void streamReconstructedExpression(std::ostream& os) const override { os << Catch::Detail::stringify(m_lhs); }
 
-public:
+    public:
         UnaryExpr(LhsT lhs)
             : m_lhs(lhs)
         {
@@ -1073,7 +1078,7 @@ public:
     class ExprLhs {
         LhsT m_lhs;
 
-public:
+    public:
         ExprLhs(LhsT lhs)
             : m_lhs(lhs)
         {
@@ -1179,8 +1184,8 @@ namespace Catch {
             Normal = 0x01,
 
             ContinueOnFailure = 0x02, // Failures fail test, but execution continues
-            FalseTest = 0x04,         // Prefix expression with !
-            SuppressFail = 0x08       // Failures are reported but do not fail the test
+            FalseTest = 0x04, // Prefix expression with !
+            SuppressFail = 0x08 // Failures are reported but do not fail the test
         };
     };
 
@@ -1222,7 +1227,7 @@ namespace Catch {
         ITransientExpression const* m_transientExpression = nullptr;
         bool m_isNegated;
 
-public:
+    public:
         LazyExpression(bool isNegated);
         LazyExpression(LazyExpression const& other);
         LazyExpression& operator=(LazyExpression const&) = delete;
@@ -1238,7 +1243,7 @@ public:
         bool m_shouldThrow = false;
         bool m_inExceptionGuard = false;
 
-public:
+    public:
         AssertionHandler(StringRef macroName, SourceLineInfo const& lineInfo, StringRef capturedExpression, ResultDisposition::Flags resultDisposition);
         ~AssertionHandler();
 
@@ -1267,8 +1272,8 @@ public:
 
 } // namespace Catch
 
-// end catch_assertionhandler.h
-// start catch_message.h
+    // end catch_assertionhandler.h
+    // start catch_message.h
 
 #include <sstream>
 #include <string>
@@ -1287,7 +1292,7 @@ namespace Catch {
         bool operator==(MessageInfo const& other) const;
         bool operator<(MessageInfo const& other) const;
 
-private:
+    private:
         static unsigned int globalCount;
     };
 
@@ -1318,7 +1323,7 @@ private:
     };
 
     class ScopedMessage {
-public:
+    public:
         ScopedMessage(MessageBuilder const& builder);
         ~ScopedMessage();
 
@@ -1327,8 +1332,8 @@ public:
 
 } // end namespace Catch
 
-// end catch_message.h
-// start catch_interfaces_capture.h
+    // end catch_message.h
+    // start catch_interfaces_capture.h
 
 #include <string>
 
@@ -1383,7 +1388,9 @@ namespace Catch {
 
 #ifdef CATCH_PLATFORM_MAC
 
-#define CATCH_TRAP() __asm__("int $3\n" : :) /* NOLINT */
+#define CATCH_TRAP() __asm__("int $3\n" \
+                             :          \
+                             :) /* NOLINT */
 
 #elif defined(CATCH_PLATFORM_LINUX)
 // If we can use inline assembler, do it because this allows us to break
@@ -1391,7 +1398,7 @@ namespace Catch {
 // raise() called from it, i.e. one stack frame below.
 #if defined(__GNUC__) && (defined(__i386) || defined(__x86_64))
 #define CATCH_TRAP() asm volatile("int $3") /* NOLINT */
-#else                                       // Fall back to the generic way.
+#else // Fall back to the generic way.
 #include <signal.h>
 
 #define CATCH_TRAP() raise(SIGTRAP)
@@ -1404,9 +1411,9 @@ extern "C" __declspec(dllimport) void __stdcall DebugBreak();
 #endif
 
 #ifdef CATCH_TRAP
-#define CATCH_BREAK_INTO_DEBUGGER()                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \
-    if (Catch::isDebuggerActive()) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   \
-        CATCH_TRAP();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  \
+#define CATCH_BREAK_INTO_DEBUGGER()  \
+    if (Catch::isDebuggerActive()) { \
+        CATCH_TRAP();                \
     }
 #else
 #define CATCH_BREAK_INTO_DEBUGGER() Catch::alwaysTrue();
@@ -1443,95 +1450,95 @@ extern "C" __declspec(dllimport) void __stdcall DebugBreak();
 // and/or an exception thrown and takes appropriate action.
 // This needs to be done as a macro so the debugger will stop in the user
 // source code rather than in Catch library code
-#define INTERNAL_CATCH_REACT(handler)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  \
-    if (handler.shouldDebugBreak())                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \
-        CATCH_BREAK_INTO_DEBUGGER();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   \
+#define INTERNAL_CATCH_REACT(handler) \
+    if (handler.shouldDebugBreak())   \
+        CATCH_BREAK_INTO_DEBUGGER();  \
     handler.reactWithoutDebugBreak();
 
 #define INTERNAL_CATCH_TRY(capturer) try
-#define INTERNAL_CATCH_CATCH(capturer)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 \
+#define INTERNAL_CATCH_CATCH(capturer) \
     catch (...) { capturer.useActiveException(); }
 
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-#define INTERNAL_CATCH_TEST(macroName, resultDisposition, ...)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         \
-    do {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               \
-        Catch::AssertionHandler catchAssertionHandler(macroName, CATCH_INTERNAL_LINEINFO, CATCH_INTERNAL_STRINGIFY(__VA_ARGS__), resultDisposition);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   \
-        INTERNAL_CATCH_TRY(catchAssertionHandler)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      \
-        {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              \
-            CATCH_INTERNAL_SUPPRESS_PARENTHESES_WARNINGS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               \
-            catchAssertionHandler.handle(Catch::Decomposer() <= __VA_ARGS__);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          \
-            CATCH_INTERNAL_UNSUPPRESS_PARENTHESES_WARNINGS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             \
-        }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              \
-        INTERNAL_CATCH_CATCH(catchAssertionHandler)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \
-        INTERNAL_CATCH_REACT(catchAssertionHandler)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \
+#define INTERNAL_CATCH_TEST(macroName, resultDisposition, ...)                                                                                       \
+    do {                                                                                                                                             \
+        Catch::AssertionHandler catchAssertionHandler(macroName, CATCH_INTERNAL_LINEINFO, CATCH_INTERNAL_STRINGIFY(__VA_ARGS__), resultDisposition); \
+        INTERNAL_CATCH_TRY(catchAssertionHandler)                                                                                                    \
+        {                                                                                                                                            \
+            CATCH_INTERNAL_SUPPRESS_PARENTHESES_WARNINGS                                                                                             \
+            catchAssertionHandler.handle(Catch::Decomposer() <= __VA_ARGS__);                                                                        \
+            CATCH_INTERNAL_UNSUPPRESS_PARENTHESES_WARNINGS                                                                                           \
+        }                                                                                                                                            \
+        INTERNAL_CATCH_CATCH(catchAssertionHandler)                                                                                                  \
+        INTERNAL_CATCH_REACT(catchAssertionHandler)                                                                                                  \
     } while (Catch::isTrue(false && static_cast<bool>(!!(__VA_ARGS__)))) // the expression here is never evaluated at runtime but it forces the compiler to give it a look
 // The double negation silences MSVC's C4800 warning, the static_cast forces short-circuit evaluation if the type has overloaded &&.
 
 ///////////////////////////////////////////////////////////////////////////////
-#define INTERNAL_CATCH_IF(macroName, resultDisposition, ...)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           \
-    INTERNAL_CATCH_TEST(macroName, resultDisposition, __VA_ARGS__);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \
+#define INTERNAL_CATCH_IF(macroName, resultDisposition, ...)        \
+    INTERNAL_CATCH_TEST(macroName, resultDisposition, __VA_ARGS__); \
     if (Catch::getResultCapture().lastAssertionPassed())
 
 ///////////////////////////////////////////////////////////////////////////////
-#define INTERNAL_CATCH_ELSE(macroName, resultDisposition, ...)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         \
-    INTERNAL_CATCH_TEST(macroName, resultDisposition, __VA_ARGS__);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \
+#define INTERNAL_CATCH_ELSE(macroName, resultDisposition, ...)      \
+    INTERNAL_CATCH_TEST(macroName, resultDisposition, __VA_ARGS__); \
     if (!Catch::getResultCapture().lastAssertionPassed())
 
 ///////////////////////////////////////////////////////////////////////////////
-#define INTERNAL_CATCH_NO_THROW(macroName, resultDisposition, ...)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     \
-    do {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               \
-        Catch::AssertionHandler catchAssertionHandler(macroName, CATCH_INTERNAL_LINEINFO, CATCH_INTERNAL_STRINGIFY(__VA_ARGS__), resultDisposition);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   \
-        try {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          \
-            static_cast<void>(__VA_ARGS__);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            \
-            catchAssertionHandler.handle(Catch::ResultWas::Ok);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \
-        } catch (...) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \
-            catchAssertionHandler.useActiveException();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \
-        }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              \
-        INTERNAL_CATCH_REACT(catchAssertionHandler)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \
+#define INTERNAL_CATCH_NO_THROW(macroName, resultDisposition, ...)                                                                                   \
+    do {                                                                                                                                             \
+        Catch::AssertionHandler catchAssertionHandler(macroName, CATCH_INTERNAL_LINEINFO, CATCH_INTERNAL_STRINGIFY(__VA_ARGS__), resultDisposition); \
+        try {                                                                                                                                        \
+            static_cast<void>(__VA_ARGS__);                                                                                                          \
+            catchAssertionHandler.handle(Catch::ResultWas::Ok);                                                                                      \
+        } catch (...) {                                                                                                                              \
+            catchAssertionHandler.useActiveException();                                                                                              \
+        }                                                                                                                                            \
+        INTERNAL_CATCH_REACT(catchAssertionHandler)                                                                                                  \
     } while (Catch::alwaysFalse())
 
 ///////////////////////////////////////////////////////////////////////////////
-#define INTERNAL_CATCH_THROWS(macroName, resultDisposition, ...)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       \
-    do {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               \
-        Catch::AssertionHandler catchAssertionHandler(macroName, CATCH_INTERNAL_LINEINFO, CATCH_INTERNAL_STRINGIFY(__VA_ARGS__), resultDisposition);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   \
-        if (catchAssertionHandler.allowThrows())                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       \
-            try {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      \
-                static_cast<void>(__VA_ARGS__);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \
-                catchAssertionHandler.handle(Catch::ResultWas::DidntThrowException);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   \
-            } catch (...) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            \
-                catchAssertionHandler.handle(Catch::ResultWas::Ok);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \
-            }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          \
-        else                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           \
-            catchAssertionHandler.handle(Catch::ResultWas::Ok);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \
-        INTERNAL_CATCH_REACT(catchAssertionHandler)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \
+#define INTERNAL_CATCH_THROWS(macroName, resultDisposition, ...)                                                                                     \
+    do {                                                                                                                                             \
+        Catch::AssertionHandler catchAssertionHandler(macroName, CATCH_INTERNAL_LINEINFO, CATCH_INTERNAL_STRINGIFY(__VA_ARGS__), resultDisposition); \
+        if (catchAssertionHandler.allowThrows())                                                                                                     \
+            try {                                                                                                                                    \
+                static_cast<void>(__VA_ARGS__);                                                                                                      \
+                catchAssertionHandler.handle(Catch::ResultWas::DidntThrowException);                                                                 \
+            } catch (...) {                                                                                                                          \
+                catchAssertionHandler.handle(Catch::ResultWas::Ok);                                                                                  \
+            }                                                                                                                                        \
+        else                                                                                                                                         \
+            catchAssertionHandler.handle(Catch::ResultWas::Ok);                                                                                      \
+        INTERNAL_CATCH_REACT(catchAssertionHandler)                                                                                                  \
     } while (Catch::alwaysFalse())
 
 ///////////////////////////////////////////////////////////////////////////////
-#define INTERNAL_CATCH_THROWS_AS(macroName, exceptionType, resultDisposition, expr)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \
-    do {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               \
-        Catch::AssertionHandler catchAssertionHandler(macroName, CATCH_INTERNAL_LINEINFO, CATCH_INTERNAL_STRINGIFY(expr) ", " CATCH_INTERNAL_STRINGIFY(exceptionType), resultDisposition);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             \
-        if (catchAssertionHandler.allowThrows())                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       \
-            try {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      \
-                static_cast<void>(expr);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               \
-                catchAssertionHandler.handle(Catch::ResultWas::DidntThrowException);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   \
-            } catch (exceptionType const&) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           \
-                catchAssertionHandler.handle(Catch::ResultWas::Ok);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \
-            } catch (...) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            \
-                catchAssertionHandler.useActiveException();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            \
-            }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          \
-        else                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           \
-            catchAssertionHandler.handle(Catch::ResultWas::Ok);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \
-        INTERNAL_CATCH_REACT(catchAssertionHandler)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \
+#define INTERNAL_CATCH_THROWS_AS(macroName, exceptionType, resultDisposition, expr)                                                                                                        \
+    do {                                                                                                                                                                                   \
+        Catch::AssertionHandler catchAssertionHandler(macroName, CATCH_INTERNAL_LINEINFO, CATCH_INTERNAL_STRINGIFY(expr) ", " CATCH_INTERNAL_STRINGIFY(exceptionType), resultDisposition); \
+        if (catchAssertionHandler.allowThrows())                                                                                                                                           \
+            try {                                                                                                                                                                          \
+                static_cast<void>(expr);                                                                                                                                                   \
+                catchAssertionHandler.handle(Catch::ResultWas::DidntThrowException);                                                                                                       \
+            } catch (exceptionType const&) {                                                                                                                                               \
+                catchAssertionHandler.handle(Catch::ResultWas::Ok);                                                                                                                        \
+            } catch (...) {                                                                                                                                                                \
+                catchAssertionHandler.useActiveException();                                                                                                                                \
+            }                                                                                                                                                                              \
+        else                                                                                                                                                                               \
+            catchAssertionHandler.handle(Catch::ResultWas::Ok);                                                                                                                            \
+        INTERNAL_CATCH_REACT(catchAssertionHandler)                                                                                                                                        \
     } while (Catch::alwaysFalse())
 
 ///////////////////////////////////////////////////////////////////////////////
-#define INTERNAL_CATCH_MSG(macroName, messageType, resultDisposition, ...)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             \
-    do {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               \
-        Catch::AssertionHandler catchAssertionHandler(macroName, CATCH_INTERNAL_LINEINFO, "", resultDisposition);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      \
-        catchAssertionHandler.handle(messageType, (Catch::MessageStream() << __VA_ARGS__ + ::Catch::StreamEndStop()).m_stream.str());                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  \
-        INTERNAL_CATCH_REACT(catchAssertionHandler)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \
+#define INTERNAL_CATCH_MSG(macroName, messageType, resultDisposition, ...)                                                            \
+    do {                                                                                                                              \
+        Catch::AssertionHandler catchAssertionHandler(macroName, CATCH_INTERNAL_LINEINFO, "", resultDisposition);                     \
+        catchAssertionHandler.handle(messageType, (Catch::MessageStream() << __VA_ARGS__ + ::Catch::StreamEndStop()).m_stream.str()); \
+        INTERNAL_CATCH_REACT(catchAssertionHandler)                                                                                   \
     } while (Catch::alwaysFalse())
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1539,29 +1546,29 @@ extern "C" __declspec(dllimport) void __stdcall DebugBreak();
 
 ///////////////////////////////////////////////////////////////////////////////
 // Although this is matcher-based, it can be used with just a string
-#define INTERNAL_CATCH_THROWS_STR_MATCHES(macroName, resultDisposition, matcher, ...)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  \
-    do {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               \
-        Catch::AssertionHandler catchAssertionHandler(macroName, CATCH_INTERNAL_LINEINFO, CATCH_INTERNAL_STRINGIFY(__VA_ARGS__) ", " CATCH_INTERNAL_STRINGIFY(matcher), resultDisposition);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            \
-        if (catchAssertionHandler.allowThrows())                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       \
-            try {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      \
-                static_cast<void>(__VA_ARGS__);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \
-                catchAssertionHandler.handle(Catch::ResultWas::DidntThrowException);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   \
-            } catch (...) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            \
-                handleExceptionMatchExpr(catchAssertionHandler, matcher, #matcher);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \
-            }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          \
-        else                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           \
-            catchAssertionHandler.handle(Catch::ResultWas::Ok);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \
-        INTERNAL_CATCH_REACT(catchAssertionHandler)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \
+#define INTERNAL_CATCH_THROWS_STR_MATCHES(macroName, resultDisposition, matcher, ...)                                                                                                       \
+    do {                                                                                                                                                                                    \
+        Catch::AssertionHandler catchAssertionHandler(macroName, CATCH_INTERNAL_LINEINFO, CATCH_INTERNAL_STRINGIFY(__VA_ARGS__) ", " CATCH_INTERNAL_STRINGIFY(matcher), resultDisposition); \
+        if (catchAssertionHandler.allowThrows())                                                                                                                                            \
+            try {                                                                                                                                                                           \
+                static_cast<void>(__VA_ARGS__);                                                                                                                                             \
+                catchAssertionHandler.handle(Catch::ResultWas::DidntThrowException);                                                                                                        \
+            } catch (...) {                                                                                                                                                                 \
+                handleExceptionMatchExpr(catchAssertionHandler, matcher, #matcher);                                                                                                         \
+            }                                                                                                                                                                               \
+        else                                                                                                                                                                                \
+            catchAssertionHandler.handle(Catch::ResultWas::Ok);                                                                                                                             \
+        INTERNAL_CATCH_REACT(catchAssertionHandler)                                                                                                                                         \
     } while (Catch::alwaysFalse())
 
 #endif // CATCH_CONFIG_DISABLE
 
-// end catch_capture.hpp
-// start catch_section.h
+    // end catch_capture.hpp
+    // start catch_section.h
 
-// start catch_section_info.h
+    // start catch_section_info.h
 
-// start catch_totals.h
+    // start catch_totals.h
 
 #include <cstddef>
 
@@ -1615,8 +1622,8 @@ namespace Catch {
 
 } // end namespace Catch
 
-// end catch_section_info.h
-// start catch_timer.h
+    // end catch_section_info.h
+    // start catch_timer.h
 
 #include <cstdint>
 
@@ -1628,7 +1635,7 @@ namespace Catch {
     class Timer {
         uint64_t m_nanoseconds = 0;
 
-public:
+    public:
         void start();
         auto getElapsedNanoseconds() const -> unsigned int;
         auto getElapsedMicroseconds() const -> unsigned int;
@@ -1644,14 +1651,14 @@ public:
 namespace Catch {
 
     class Section : NonCopyable {
-public:
+    public:
         Section(SectionInfo const& info);
         ~Section();
 
         // This indicates whether the section should be executed or not
         explicit operator bool() const;
 
-private:
+    private:
         SectionInfo m_info;
 
         std::string m_name;
@@ -1664,8 +1671,8 @@ private:
 
 #define INTERNAL_CATCH_SECTION(...) if (Catch::Section const& INTERNAL_CATCH_UNIQUE_NAME(catch_internal_Section) = Catch::SectionInfo(CATCH_INTERNAL_LINEINFO, __VA_ARGS__))
 
-// end catch_section.h
-// start catch_benchmark.h
+    // end catch_section.h
+    // start catch_benchmark.h
 
 #include <cstdint>
 #include <string>
@@ -1682,7 +1689,7 @@ namespace Catch {
 
         static auto getResolution() -> uint64_t;
 
-public:
+    public:
         // Keep most of this inline as it's on the code path that is being timed
         BenchmarkLooper(StringRef name)
             : m_name(name)
@@ -1709,10 +1716,10 @@ public:
 
 #define BENCHMARK(name) for (Catch::BenchmarkLooper looper(name); looper; looper.increment())
 
-// end catch_benchmark.h
-// start catch_interfaces_exception.h
+    // end catch_benchmark.h
+    // start catch_interfaces_exception.h
 
-// start catch_interfaces_registry_hub.h
+    // start catch_interfaces_registry_hub.h
 
 #include <memory>
 #include <string>
@@ -1787,7 +1794,7 @@ namespace Catch {
     class ExceptionTranslatorRegistrar {
         template <typename T>
         class ExceptionTranslator : public IExceptionTranslator {
-    public:
+        public:
             ExceptionTranslator(std::string (*translateFunction)(T&))
                 : m_translateFunction(translateFunction)
             {
@@ -1805,11 +1812,11 @@ namespace Catch {
                 }
             }
 
-    protected:
+        protected:
             std::string (*m_translateFunction)(T&);
         };
 
-public:
+    public:
         template <typename T>
         ExceptionTranslatorRegistrar(std::string (*translateFunction)(T&))
         {
@@ -1819,19 +1826,19 @@ public:
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-#define INTERNAL_CATCH_TRANSLATE_EXCEPTION2(translatorName, signature)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 \
-    static std::string translatorName(signature);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      \
-    namespace {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \
-        Catch::ExceptionTranslatorRegistrar INTERNAL_CATCH_UNIQUE_NAME(catch_internal_ExceptionRegistrar)(&translatorName);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            \
-    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  \
+#define INTERNAL_CATCH_TRANSLATE_EXCEPTION2(translatorName, signature)                                                      \
+    static std::string translatorName(signature);                                                                           \
+    namespace {                                                                                                             \
+        Catch::ExceptionTranslatorRegistrar INTERNAL_CATCH_UNIQUE_NAME(catch_internal_ExceptionRegistrar)(&translatorName); \
+    }                                                                                                                       \
     static std::string translatorName(signature)
 
 #define INTERNAL_CATCH_TRANSLATE_EXCEPTION(signature) INTERNAL_CATCH_TRANSLATE_EXCEPTION2(INTERNAL_CATCH_UNIQUE_NAME(catch_internal_ExceptionTranslator), signature)
 
-// end catch_interfaces_exception.h
-// start catch_approx.h
+    // end catch_interfaces_exception.h
+    // start catch_approx.h
 
-// start catch_enforce.h
+    // start catch_enforce.h
 
 #include <sstream>
 #include <stdexcept>
@@ -1839,10 +1846,10 @@ public:
 #define CATCH_PREPARE_EXCEPTION(type, msg) type(static_cast<std::ostringstream&&>(std::ostringstream() << msg).str())
 #define CATCH_INTERNAL_ERROR(msg) throw CATCH_PREPARE_EXCEPTION(std::logic_error, CATCH_INTERNAL_LINEINFO << ": Internal Catch error: " << msg);
 #define CATCH_ERROR(msg) throw CATCH_PREPARE_EXCEPTION(std::domain_error, msg)
-#define CATCH_ENFORCE(condition, msg)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  \
-    do {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               \
-        if (!(condition))                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              \
-            CATCH_ERROR(msg);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          \
+#define CATCH_ENFORCE(condition, msg) \
+    do {                              \
+        if (!(condition))             \
+            CATCH_ERROR(msg);         \
     } while (false)
 
 // end catch_enforce.h
@@ -1852,10 +1859,10 @@ namespace Catch {
     namespace Detail {
 
         class Approx {
-    private:
+        private:
             bool equalityComparisonImpl(double other) const;
 
-    public:
+        public:
             explicit Approx(double value);
 
             static Approx custom();
@@ -1952,7 +1959,7 @@ namespace Catch {
 
             std::string toString() const;
 
-    private:
+        private:
             double m_epsilon;
             double m_margin;
             double m_scale;
@@ -1967,8 +1974,8 @@ namespace Catch {
 
 } // end namespace Catch
 
-// end catch_approx.h
-// start catch_string_manip.h
+    // end catch_approx.h
+    // start catch_string_manip.h
 
 #include <iosfwd>
 #include <string>
@@ -1997,9 +2004,9 @@ namespace Catch {
 
 // end catch_string_manip.h
 #ifndef CATCH_CONFIG_DISABLE_MATCHERS
-// start catch_capture_matchers.h
+    // start catch_capture_matchers.h
 
-// start catch_matchers.h
+    // start catch_matchers.h
 
 #include <string>
 #include <vector>
@@ -2016,13 +2023,13 @@ namespace Catch {
             struct MatchNotOf;
 
             class MatcherUntypedBase {
-        public:
+            public:
                 MatcherUntypedBase() = default;
                 MatcherUntypedBase(MatcherUntypedBase const&) = default;
                 MatcherUntypedBase& operator=(MatcherUntypedBase const&) = delete;
                 std::string toString() const;
 
-        protected:
+            protected:
                 virtual ~MatcherUntypedBase();
                 virtual std::string describe() const = 0;
                 mutable std::string m_cachedToString;
@@ -2156,8 +2163,8 @@ namespace Catch {
 
 } // namespace Catch
 
-// end catch_matchers.h
-// start catch_matchers_string.h
+    // end catch_matchers.h
+    // start catch_matchers_string.h
 
 #include <string>
 
@@ -2337,7 +2344,7 @@ namespace Catch {
         StringRef m_matcherString;
         bool m_result;
 
-public:
+    public:
         MatchExpr(ArgT const& arg, MatcherT const& matcher, StringRef matcherString)
             : m_arg(arg)
             , m_matcher(matcher)
@@ -2373,38 +2380,38 @@ public:
 } // namespace Catch
 
 ///////////////////////////////////////////////////////////////////////////////
-#define INTERNAL_CHECK_THAT(macroName, matcher, resultDisposition, arg)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \
-    do {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               \
-        Catch::AssertionHandler catchAssertionHandler(macroName, CATCH_INTERNAL_LINEINFO, CATCH_INTERNAL_STRINGIFY(arg) ", " CATCH_INTERNAL_STRINGIFY(matcher), resultDisposition);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \
-        INTERNAL_CATCH_TRY(catchAssertionHandler) { catchAssertionHandler.handle(Catch::makeMatchExpr(arg, matcher, #matcher)); }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      \
-        INTERNAL_CATCH_CATCH(catchAssertionHandler)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \
-        INTERNAL_CATCH_REACT(catchAssertionHandler)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \
+#define INTERNAL_CHECK_THAT(macroName, matcher, resultDisposition, arg)                                                                                                             \
+    do {                                                                                                                                                                            \
+        Catch::AssertionHandler catchAssertionHandler(macroName, CATCH_INTERNAL_LINEINFO, CATCH_INTERNAL_STRINGIFY(arg) ", " CATCH_INTERNAL_STRINGIFY(matcher), resultDisposition); \
+        INTERNAL_CATCH_TRY(catchAssertionHandler) { catchAssertionHandler.handle(Catch::makeMatchExpr(arg, matcher, #matcher)); }                                                   \
+        INTERNAL_CATCH_CATCH(catchAssertionHandler)                                                                                                                                 \
+        INTERNAL_CATCH_REACT(catchAssertionHandler)                                                                                                                                 \
     } while (Catch::alwaysFalse())
 
 ///////////////////////////////////////////////////////////////////////////////
-#define INTERNAL_CATCH_THROWS_MATCHES(macroName, exceptionType, resultDisposition, matcher, ...)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       \
-    do {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               \
-        Catch::AssertionHandler catchAssertionHandler(macroName, CATCH_INTERNAL_LINEINFO, CATCH_INTERNAL_STRINGIFY(__VA_ARGS__) ", " CATCH_INTERNAL_STRINGIFY(exceptionType) ", " CATCH_INTERNAL_STRINGIFY(matcher), resultDisposition);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               \
-        if (catchAssertionHandler.allowThrows())                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       \
-            try {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      \
-                static_cast<void>(__VA_ARGS__);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \
-                catchAssertionHandler.handle(Catch::ResultWas::DidntThrowException);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   \
-            } catch (exceptionType const& ex) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \
-                catchAssertionHandler.handle(Catch::makeMatchExpr(ex, matcher, #matcher));                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             \
-            } catch (...) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            \
-                catchAssertionHandler.useActiveException();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            \
-            }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          \
-        else                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           \
-            catchAssertionHandler.handle(Catch::ResultWas::Ok);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \
-        INTERNAL_CATCH_REACT(catchAssertionHandler)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \
+#define INTERNAL_CATCH_THROWS_MATCHES(macroName, exceptionType, resultDisposition, matcher, ...)                                                                                                                                         \
+    do {                                                                                                                                                                                                                                 \
+        Catch::AssertionHandler catchAssertionHandler(macroName, CATCH_INTERNAL_LINEINFO, CATCH_INTERNAL_STRINGIFY(__VA_ARGS__) ", " CATCH_INTERNAL_STRINGIFY(exceptionType) ", " CATCH_INTERNAL_STRINGIFY(matcher), resultDisposition); \
+        if (catchAssertionHandler.allowThrows())                                                                                                                                                                                         \
+            try {                                                                                                                                                                                                                        \
+                static_cast<void>(__VA_ARGS__);                                                                                                                                                                                          \
+                catchAssertionHandler.handle(Catch::ResultWas::DidntThrowException);                                                                                                                                                     \
+            } catch (exceptionType const& ex) {                                                                                                                                                                                          \
+                catchAssertionHandler.handle(Catch::makeMatchExpr(ex, matcher, #matcher));                                                                                                                                               \
+            } catch (...) {                                                                                                                                                                                                              \
+                catchAssertionHandler.useActiveException();                                                                                                                                                                              \
+            }                                                                                                                                                                                                                            \
+        else                                                                                                                                                                                                                             \
+            catchAssertionHandler.handle(Catch::ResultWas::Ok);                                                                                                                                                                          \
+        INTERNAL_CATCH_REACT(catchAssertionHandler)                                                                                                                                                                                      \
     } while (Catch::alwaysFalse())
 
 // end catch_capture_matchers.h
 #endif
 
-// These files are included here so the single_include script doesn't put them
-// in the conditionally compiled sections
-// start catch_test_case_info.h
+    // These files are included here so the single_include script doesn't put them
+    // in the conditionally compiled sections
+    // start catch_test_case_info.h
 
 #include <memory>
 #include <string>
@@ -2420,7 +2427,13 @@ namespace Catch {
     struct ITestInvoker;
 
     struct TestCaseInfo {
-        enum SpecialProperties { None = 0, IsHidden = 1 << 1, ShouldFail = 1 << 2, MayFail = 1 << 3, Throws = 1 << 4, NonPortable = 1 << 5, Benchmark = 1 << 6 };
+        enum SpecialProperties { None = 0,
+            IsHidden = 1 << 1,
+            ShouldFail = 1 << 2,
+            MayFail = 1 << 3,
+            Throws = 1 << 4,
+            NonPortable = 1 << 5,
+            Benchmark = 1 << 6 };
 
         TestCaseInfo(std::string const& _name, std::string const& _className, std::string const& _description, std::vector<std::string> const& _tags, SourceLineInfo const& _lineInfo);
 
@@ -2443,7 +2456,7 @@ namespace Catch {
     };
 
     class TestCase : public TestCaseInfo {
-public:
+    public:
         TestCase(ITestInvoker* testCase, TestCaseInfo const& info);
 
         TestCase withName(std::string const& _newName) const;
@@ -2455,7 +2468,7 @@ public:
         bool operator==(TestCase const& other) const;
         bool operator<(TestCase const& other) const;
 
-private:
+    private:
         std::shared_ptr<ITestInvoker> test;
     };
 
@@ -2477,10 +2490,10 @@ namespace Catch {
     };
 }
 
-// end catch_interfaces_runner.h
+    // end catch_interfaces_runner.h
 
 #ifdef __OBJC__
-// start catch_objc.hpp
+    // start catch_objc.hpp
 
 #import <objc/runtime.h>
 
@@ -2506,7 +2519,7 @@ namespace Catch {
 
     class OcMethod : public ITestInvoker {
 
-public:
+    public:
         OcMethod(Class cls, SEL sel)
             : m_cls(cls)
             , m_sel(sel)
@@ -2524,7 +2537,7 @@ public:
             arcSafeRelease(obj);
         }
 
-private:
+    private:
         virtual ~OcMethod() {}
 
         Class m_cls;
@@ -2643,7 +2656,7 @@ private:
                 };
 
             } // namespace NSStringMatchers
-        }     // namespace Impl
+        } // namespace Impl
 
         inline Impl::NSStringMatchers::Equals Equals(NSString* substr) { return Impl::NSStringMatchers::Equals(substr); }
 
@@ -2663,9 +2676,9 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 #define OC_MAKE_UNIQUE_NAME(root, uniqueSuffix) root##uniqueSuffix
-#define OC_TEST_CASE2(name, desc, uniqueSuffix)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \
-    +(NSString*)OC_MAKE_UNIQUE_NAME(Catch_Name_test_, uniqueSuffix) { return @name; }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  \
-    +(NSString*)OC_MAKE_UNIQUE_NAME(Catch_Description_test_, uniqueSuffix) { return @desc; }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           \
+#define OC_TEST_CASE2(name, desc, uniqueSuffix)                                              \
+    +(NSString*)OC_MAKE_UNIQUE_NAME(Catch_Name_test_, uniqueSuffix) { return @name; }        \
+    +(NSString*)OC_MAKE_UNIQUE_NAME(Catch_Description_test_, uniqueSuffix) { return @desc; } \
     -(void)OC_MAKE_UNIQUE_NAME(Catch_TestCase_test_, uniqueSuffix)
 
 #define OC_TEST_CASE(name, desc) OC_TEST_CASE2(name, desc, __LINE__)
@@ -2674,22 +2687,22 @@ private:
 #endif
 
 #ifdef CATCH_CONFIG_EXTERNAL_INTERFACES
-// start catch_external_interfaces.h
+    // start catch_external_interfaces.h
 
-// start catch_reporter_bases.hpp
+    // start catch_reporter_bases.hpp
 
-// start catch_interfaces_reporter.h
+    // start catch_interfaces_reporter.h
 
-// start catch_config.hpp
+    // start catch_config.hpp
 
-// start catch_test_spec_parser.h
+    // start catch_test_spec_parser.h
 
 #ifdef __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wpadded"
 #endif
 
-// start catch_test_spec.h
+    // start catch_test_spec.h
 
 #ifdef __clang__
 #pragma clang diagnostic push
@@ -2700,14 +2713,17 @@ private:
 
 namespace Catch {
     class WildcardPattern {
-        enum WildcardPosition { NoWildcard = 0, WildcardAtStart = 1, WildcardAtEnd = 2, WildcardAtBothEnds = WildcardAtStart | WildcardAtEnd };
+        enum WildcardPosition { NoWildcard = 0,
+            WildcardAtStart = 1,
+            WildcardAtEnd = 2,
+            WildcardAtBothEnds = WildcardAtStart | WildcardAtEnd };
 
-public:
+    public:
         WildcardPattern(std::string const& pattern, CaseSensitive::Choice caseSensitivity);
         virtual ~WildcardPattern() = default;
         virtual bool matches(std::string const& str) const;
 
-private:
+    private:
         std::string adjustCase(std::string const& str) const;
         CaseSensitive::Choice m_caseSensitivity;
         WildcardPosition m_wildcard = NoWildcard;
@@ -2730,32 +2746,32 @@ namespace Catch {
         using PatternPtr = std::shared_ptr<Pattern>;
 
         class NamePattern : public Pattern {
-    public:
+        public:
             NamePattern(std::string const& name);
             virtual ~NamePattern();
             virtual bool matches(TestCaseInfo const& testCase) const override;
 
-    private:
+        private:
             WildcardPattern m_wildcardPattern;
         };
 
         class TagPattern : public Pattern {
-    public:
+        public:
             TagPattern(std::string const& tag);
             virtual ~TagPattern();
             virtual bool matches(TestCaseInfo const& testCase) const override;
 
-    private:
+        private:
             std::string m_tag;
         };
 
         class ExcludedPattern : public Pattern {
-    public:
+        public:
             ExcludedPattern(PatternPtr const& underlyingPattern);
             virtual ~ExcludedPattern();
             virtual bool matches(TestCaseInfo const& testCase) const override;
 
-    private:
+        private:
             PatternPtr m_underlyingPattern;
         };
 
@@ -2765,11 +2781,11 @@ namespace Catch {
             bool matches(TestCaseInfo const& testCase) const;
         };
 
-public:
+    public:
         bool hasFilters() const;
         bool matches(TestCaseInfo const& testCase) const;
 
-private:
+    private:
         std::vector<Filter> m_filters;
 
         friend class TestSpecParser;
@@ -2780,8 +2796,8 @@ private:
 #pragma clang diagnostic pop
 #endif
 
-// end catch_test_spec.h
-// start catch_interfaces_tag_alias_registry.h
+    // end catch_test_spec.h
+    // start catch_interfaces_tag_alias_registry.h
 
 #include <string>
 
@@ -2804,7 +2820,11 @@ namespace Catch {
 namespace Catch {
 
     class TestSpecParser {
-        enum Mode { None, Name, QuotedName, Tag, EscapedName };
+        enum Mode { None,
+            Name,
+            QuotedName,
+            Tag,
+            EscapedName };
         Mode m_mode = None;
         bool m_exclusion = false;
         std::size_t m_start = std::string::npos, m_pos = 0;
@@ -2814,13 +2834,13 @@ namespace Catch {
         TestSpec m_testSpec;
         ITagAliasRegistry const* m_tagAliases = nullptr;
 
-public:
+    public:
         TestSpecParser(ITagAliasRegistry const& tagAliases);
 
         TestSpecParser& parse(std::string const& arg);
         TestSpec testSpec();
 
-private:
+    private:
         void visitChar(char c);
         void startNewMode(Mode mode, std::size_t start);
         void escape();
@@ -2857,8 +2877,8 @@ private:
 #pragma clang diagnostic pop
 #endif
 
-// end catch_test_spec_parser.h
-// start catch_interfaces_config.h
+    // end catch_test_spec_parser.h
+    // start catch_interfaces_config.h
 
 #include <iosfwd>
 #include <memory>
@@ -2867,23 +2887,35 @@ private:
 
 namespace Catch {
 
-    enum class Verbosity { Quiet = 0, Normal, High };
+    enum class Verbosity { Quiet = 0,
+        Normal,
+        High };
 
     struct WarnAbout {
-        enum What { Nothing = 0x00, NoAssertions = 0x01 };
+        enum What { Nothing = 0x00,
+            NoAssertions = 0x01 };
     };
 
     struct ShowDurations {
-        enum OrNot { DefaultForReporter, Always, Never };
+        enum OrNot { DefaultForReporter,
+            Always,
+            Never };
     };
     struct RunTests {
-        enum InWhatOrder { InDeclarationOrder, InLexicographicalOrder, InRandomOrder };
+        enum InWhatOrder { InDeclarationOrder,
+            InLexicographicalOrder,
+            InRandomOrder };
     };
     struct UseColour {
-        enum YesOrNo { Auto, Yes, No };
+        enum YesOrNo { Auto,
+            Yes,
+            No };
     };
     struct WaitForKeypress {
-        enum When { Never, BeforeStart = 1, BeforeExit = 2, BeforeStartAndExit = BeforeStart | BeforeExit };
+        enum When { Never,
+            BeforeStart = 1,
+            BeforeExit = 2,
+            BeforeStartAndExit = BeforeStart | BeforeExit };
     };
 
     class TestSpec;
@@ -2913,18 +2945,18 @@ namespace Catch {
     using IConfigPtr = std::shared_ptr<IConfig const>;
 }
 
-// end catch_interfaces_config.h
-// Libstdc++ doesn't like incomplete classes for unique_ptr
-// start catch_stream.h
+    // end catch_interfaces_config.h
+    // Libstdc++ doesn't like incomplete classes for unique_ptr
+    // start catch_stream.h
 
-// start catch_streambuf.h
+    // start catch_streambuf.h
 
 #include <streambuf>
 
 namespace Catch {
 
     class StreamBufBase : public std::streambuf {
-public:
+    public:
         virtual ~StreamBufBase();
     };
 }
@@ -2949,22 +2981,22 @@ namespace Catch {
     class FileStream : public IStream {
         mutable std::ofstream m_ofs;
 
-public:
+    public:
         FileStream(std::string const& filename);
         ~FileStream() override = default;
 
-public: // IStream
+    public: // IStream
         std::ostream& stream() const override;
     };
 
     class CoutStream : public IStream {
         mutable std::ostream m_os;
 
-public:
+    public:
         CoutStream();
         ~CoutStream() override = default;
 
-public: // IStream
+    public: // IStream
         std::ostream& stream() const override;
     };
 
@@ -2972,16 +3004,16 @@ public: // IStream
         std::unique_ptr<StreamBufBase> m_streamBuf;
         mutable std::ostream m_os;
 
-public:
+    public:
         DebugOutStream();
         ~DebugOutStream() override = default;
 
-public: // IStream
+    public: // IStream
         std::ostream& stream() const override;
     };
 }
 
-// end catch_stream.h
+    // end catch_stream.h
 
 #include <memory>
 #include <string>
@@ -3030,7 +3062,7 @@ namespace Catch {
     };
 
     class Config : public IConfig {
-public:
+    public:
         Config() = default;
         Config(ConfigData const& data);
         virtual ~Config() = default;
@@ -3067,7 +3099,7 @@ public:
         bool showInvisibles() const override;
         Verbosity verbosity() const override;
 
-private:
+    private:
         IStream const* openStream();
         ConfigData m_data;
 
@@ -3077,8 +3109,8 @@ private:
 
 } // end namespace Catch
 
-// end catch_config.hpp
-// start catch_assertionresult.h
+    // end catch_config.hpp
+    // start catch_assertionresult.h
 
 #include <string>
 
@@ -3098,7 +3130,7 @@ namespace Catch {
     };
 
     class AssertionResult {
-public:
+    public:
         AssertionResult() = delete;
         AssertionResult(AssertionInfo const& info, AssertionResultData const& data);
 
@@ -3130,7 +3162,7 @@ namespace Catch {
     // An optional type
     template <typename T>
     class Option {
-public:
+    public:
         Option()
             : nullableValue(nullptr)
         {
@@ -3182,7 +3214,7 @@ public:
         bool operator!() const { return nullableValue == nullptr; }
         explicit operator bool() const { return some(); }
 
-private:
+    private:
         T* nullableValue;
         alignas(alignof(T)) char storage[sizeof(T)];
     };
@@ -3206,7 +3238,7 @@ namespace Catch {
         std::ostream& stream() const;
         IConfigPtr fullConfig() const;
 
-private:
+    private:
         std::ostream* m_stream;
         IConfigPtr m_fullConfig;
     };
@@ -3499,7 +3531,7 @@ namespace Catch {
             bool operator()(std::shared_ptr<SectionNode> const& node) const { return ((node->stats.sectionInfo.name == m_other.name) && (node->stats.sectionInfo.lineInfo == m_other.lineInfo)); }
             void operator=(BySectionInfo const&) = delete;
 
-    private:
+        private:
             SectionInfo const& m_other;
         };
 
@@ -3682,7 +3714,7 @@ namespace Catch {
         // Use static method for one-shot changes
         static void use(Code _colourCode);
 
-private:
+    private:
         bool m_moved = false;
     };
 
@@ -3705,7 +3737,7 @@ namespace Catch {
             virtual std::string getDescription() const override { return T::getDescription(); }
         };
 
-public:
+    public:
         ReporterRegistrar(std::string const& name) { getMutableRegistryHub().registerReporter(name, std::make_shared<ReporterFactory>()); }
     };
 
@@ -3718,25 +3750,25 @@ public:
             virtual std::string getDescription() const override { return std::string(); }
         };
 
-public:
+    public:
         ListenerRegistrar() { getMutableRegistryHub().registerListener(std::make_shared<ListenerFactory>()); }
     };
 }
 
 #if !defined(CATCH_CONFIG_DISABLE)
 
-#define CATCH_REGISTER_REPORTER(name, reporterType)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \
-    CATCH_INTERNAL_SUPPRESS_GLOBALS_WARNINGS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           \
-    namespace {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \
-        Catch::ReporterRegistrar<reporterType> catch_internal_RegistrarFor##reporterType(name);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \
-    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  \
+#define CATCH_REGISTER_REPORTER(name, reporterType)                                             \
+    CATCH_INTERNAL_SUPPRESS_GLOBALS_WARNINGS                                                    \
+    namespace {                                                                                 \
+        Catch::ReporterRegistrar<reporterType> catch_internal_RegistrarFor##reporterType(name); \
+    }                                                                                           \
     CATCH_INTERNAL_UNSUPPRESS_GLOBALS_WARNINGS
 
-#define CATCH_REGISTER_LISTENER(listenerType)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          \
-    CATCH_INTERNAL_SUPPRESS_GLOBALS_WARNINGS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           \
-    namespace {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \
-        Catch::ListenerRegistrar<listenerType> catch_internal_RegistrarFor##listenerType;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              \
-    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  \
+#define CATCH_REGISTER_LISTENER(listenerType)                                             \
+    CATCH_INTERNAL_SUPPRESS_GLOBALS_WARNINGS                                              \
+    namespace {                                                                           \
+        Catch::ListenerRegistrar<listenerType> catch_internal_RegistrarFor##listenerType; \
+    }                                                                                     \
     CATCH_INTERNAL_SUPPRESS_GLOBALS_WARNINGS
 #else // CATCH_CONFIG_DISABLE
 
@@ -3750,15 +3782,15 @@ public:
 #endif
 
 #ifdef CATCH_IMPL
-// start catch_impl.hpp
+    // start catch_impl.hpp
 
 #ifdef __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wweak-vtables"
 #endif
 
-// Keep these here for external reporters
-// start catch_test_case_tracker.h
+    // Keep these here for external reporters
+    // start catch_test_case_tracker.h
 
 #include <memory>
 #include <string>
@@ -3808,13 +3840,15 @@ namespace Catch {
 
         class TrackerContext {
 
-            enum RunState { NotStarted, Executing, CompletedCycle };
+            enum RunState { NotStarted,
+                Executing,
+                CompletedCycle };
 
             ITrackerPtr m_rootTracker;
             ITracker* m_currentTracker = nullptr;
             RunState m_runState = NotStarted;
 
-    public:
+        public:
             static TrackerContext& instance();
 
             ITracker& startRun();
@@ -3829,13 +3863,18 @@ namespace Catch {
         };
 
         class TrackerBase : public ITracker {
-    protected:
-            enum CycleState { NotStarted, Executing, ExecutingChildren, NeedsAnotherRun, CompletedSuccessfully, Failed };
+        protected:
+            enum CycleState { NotStarted,
+                Executing,
+                ExecutingChildren,
+                NeedsAnotherRun,
+                CompletedSuccessfully,
+                Failed };
 
             class TrackerHasName {
                 NameAndLocation m_nameAndLocation;
 
-        public:
+            public:
                 TrackerHasName(NameAndLocation const& nameAndLocation);
                 bool operator()(ITrackerPtr const& tracker) const;
             };
@@ -3847,7 +3886,7 @@ namespace Catch {
             Children m_children;
             CycleState m_runState = NotStarted;
 
-    public:
+        public:
             TrackerBase(NameAndLocation const& nameAndLocation, TrackerContext& ctx, ITracker* parent);
 
             NameAndLocation const& nameAndLocation() const override;
@@ -3872,7 +3911,7 @@ namespace Catch {
             void fail() override;
             void markAsNeedingAnotherRun() override;
 
-    private:
+        private:
             void moveToParent();
             void moveToThis();
         };
@@ -3880,7 +3919,7 @@ namespace Catch {
         class SectionTracker : public TrackerBase {
             std::vector<std::string> m_filters;
 
-    public:
+        public:
             SectionTracker(NameAndLocation const& nameAndLocation, TrackerContext& ctx, ITracker* parent);
 
             bool isSectionTracker() const override;
@@ -3897,7 +3936,7 @@ namespace Catch {
             int m_size;
             int m_index = -1;
 
-    public:
+        public:
             IndexTracker(NameAndLocation const& nameAndLocation, TrackerContext& ctx, ITracker* parent, int size);
 
             bool isIndexTracker() const override;
@@ -3913,9 +3952,9 @@ namespace Catch {
     } // namespace TestCaseTracking
 
     using TestCaseTracking::ITracker;
-    using TestCaseTracking::TrackerContext;
-    using TestCaseTracking::SectionTracker;
     using TestCaseTracking::IndexTracker;
+    using TestCaseTracking::SectionTracker;
+    using TestCaseTracking::TrackerContext;
 
 } // namespace Catch
 
@@ -3929,9 +3968,9 @@ namespace Catch {
         LeakDetector();
     };
 }
-// end catch_leak_detector.h
-// Cpp files will be included in the single-header file here
-// start catch_approx.cpp
+    // end catch_leak_detector.h
+    // Cpp files will be included in the single-header file here
+    // start catch_approx.cpp
 
 #include <cmath>
 #include <limits>
@@ -3975,10 +4014,10 @@ namespace Catch {
     std::string StringMaker<Catch::Detail::Approx>::convert(Catch::Detail::Approx const& value) { return value.toString(); }
 
 } // end namespace Catch
-// end catch_approx.cpp
-// start catch_assertionhandler.cpp
+    // end catch_approx.cpp
+    // start catch_assertionhandler.cpp
 
-// start catch_context.h
+    // start catch_context.h
 
 #include <memory>
 
@@ -4277,9 +4316,9 @@ namespace Catch {
 #pragma clang diagnostic ignored "-Wshadow"
 #endif
 
-// start clara.hpp
-// v1.0-develop.2
-// See https://github.com/philsquared/Clara
+    // start clara.hpp
+    // v1.0-develop.2
+    // See https://github.com/philsquared/Clara
 
 #ifndef CATCH_CLARA_CONFIG_CONSOLE_WIDTH
 #define CATCH_CLARA_CONFIG_CONSOLE_WIDTH 80
@@ -4289,16 +4328,16 @@ namespace Catch {
 #define CATCH_CLARA_TEXTFLOW_CONFIG_CONSOLE_WIDTH CATCH_CLARA_CONFIG_CONSOLE_WIDTH
 #endif
 
-// ----------- #included from clara_textflow.hpp -----------
+    // ----------- #included from clara_textflow.hpp -----------
 
-// TextFlowCpp
-//
-// A single-header library for wrapping and laying out basic text, by Phil Nash
-//
-// This work is licensed under the BSD 2-Clause license.
-// See the accompanying LICENSE file, or the one at https://opensource.org/licenses/BSD-2-Clause
-//
-// This project is hosted at https://github.com/philsquared/textflowcpp
+    // TextFlowCpp
+    //
+    // A single-header library for wrapping and laying out basic text, by Phil Nash
+    //
+    // This work is licensed under the BSD 2-Clause license.
+    // See the accompanying LICENSE file, or the one at https://opensource.org/licenses/BSD-2-Clause
+    //
+    // This project is hosted at https://github.com/philsquared/textflowcpp
 
 #include <cassert>
 #include <ostream>
@@ -4337,7 +4376,7 @@ namespace Catch {
                 size_t m_indent = 0;
                 size_t m_initialIndent = std::string::npos;
 
-        public:
+            public:
                 class iterator {
                     friend Column;
 
@@ -4401,7 +4440,7 @@ namespace Catch {
 
                     auto addIndentAndSuffix(std::string const& plain) const -> std::string { return std::string(indent(), ' ') + (m_suffix ? plain + "-" : plain); }
 
-            public:
+                public:
                     explicit iterator(Column const& column)
                         : m_column(column)
                     {
@@ -4499,7 +4538,7 @@ namespace Catch {
 
             class Spacer : public Column {
 
-        public:
+            public:
                 explicit Spacer(size_t spaceWidth)
                     : Column("")
                 {
@@ -4510,7 +4549,7 @@ namespace Catch {
             class Columns {
                 std::vector<Column> m_columns;
 
-        public:
+            public:
                 class iterator {
                     friend Columns;
                     struct EndTag {
@@ -4530,7 +4569,7 @@ namespace Catch {
                             m_iterators.push_back(col.end());
                     }
 
-            public:
+                public:
                     explicit iterator(Columns const& columns)
                         : m_columns(columns.m_columns)
                         , m_activeIterators(m_columns.size())
@@ -4627,8 +4666,8 @@ namespace Catch {
     }
 } // namespace Catch::clara::TextFlow
 
-// ----------- end of #include from clara_textflow.hpp -----------
-// ........... back in clara.hpp
+    // ----------- end of #include from clara_textflow.hpp -----------
+    // ........... back in clara.hpp
 
 #include <algorithm>
 #include <memory>
@@ -4668,7 +4707,7 @@ namespace Catch {
                 std::string m_exeName;
                 std::vector<std::string> m_args;
 
-        public:
+            public:
                 Args(int argc, char* argv[])
                 {
                     m_exeName = argv[0];
@@ -4687,7 +4726,8 @@ namespace Catch {
 
             // Wraps a token coming from a token stream. These may not directly correspond to strings as a single string
             // may encode an option + its argument if the : or = form is used
-            enum class TokenType { Option, Argument };
+            enum class TokenType { Option,
+                Argument };
             struct Token {
                 TokenType type;
                 std::string token;
@@ -4741,7 +4781,7 @@ namespace Catch {
                     }
                 }
 
-        public:
+            public:
                 explicit TokenStream(Args const& args)
                     : TokenStream(args.m_args.begin(), args.m_args.end())
                 {
@@ -4784,10 +4824,12 @@ namespace Catch {
             };
 
             class ResultBase {
-        public:
-                enum Type { Ok, LogicError, RuntimeError };
+            public:
+                enum Type { Ok,
+                    LogicError,
+                    RuntimeError };
 
-        protected:
+            protected:
                 ResultBase(Type type)
                     : m_type(type)
                 {
@@ -4801,14 +4843,14 @@ namespace Catch {
 
             template <typename T>
             class ResultValueBase : public ResultBase {
-        public:
+            public:
                 auto value() const -> T const&
                 {
                     enforceOk();
                     return m_value;
                 }
 
-        protected:
+            protected:
                 ResultValueBase(Type type)
                     : ResultBase(type)
                 {
@@ -4850,13 +4892,13 @@ namespace Catch {
 
             template <>
             class ResultValueBase<void> : public ResultBase {
-        protected:
+            protected:
                 using ResultBase::ResultBase;
             };
 
             template <typename T = void>
             class BasicResult : public ResultValueBase<T> {
-        public:
+            public:
                 template <typename U>
                 explicit BasicResult(BasicResult<U> const& other)
                     : ResultValueBase<T>(other.type())
@@ -4878,7 +4920,7 @@ namespace Catch {
                 auto type() const -> ResultBase::Type { return m_type; }
                 auto errorMessage() const -> std::string { return m_errorMessage; }
 
-        protected:
+            protected:
                 virtual void enforceOk() const
                 {
                     // !TBD: If no exceptions, std::terminate here or something
@@ -4905,10 +4947,13 @@ namespace Catch {
                 using ResultBase::m_type;
             };
 
-            enum class ParseResultType { Matched, NoMatch, ShortCircuitAll, ShortCircuitSame };
+            enum class ParseResultType { Matched,
+                NoMatch,
+                ShortCircuitAll,
+                ShortCircuitSame };
 
             class ParseState {
-        public:
+            public:
                 ParseState(ParseResultType type, TokenStream const& remainingTokens)
                     : m_type(type)
                     , m_remainingTokens(remainingTokens)
@@ -4918,7 +4963,7 @@ namespace Catch {
                 auto type() const -> ParseResultType { return m_type; }
                 auto remainingTokens() const -> TokenStream { return m_remainingTokens; }
 
-        private:
+            private:
                 ParseResultType m_type;
                 TokenStream m_remainingTokens;
             };
@@ -5100,12 +5145,13 @@ namespace Catch {
                 auto setFlag(bool flag) -> ParserResult override { return LambdaInvoker<typename UnaryLambdaTraits<L>::ReturnType>::invoke(m_lambda, flag); }
             };
 
-            enum class Optionality { Optional, Required };
+            enum class Optionality { Optional,
+                Required };
 
             struct Parser;
 
             class ParserBase {
-        public:
+            public:
                 virtual ~ParserBase() = default;
                 virtual auto validate() const -> Result { return Result::ok(); }
                 virtual auto parse(std::string const& exeName, TokenStream const& tokens) const -> InternalParseResult = 0;
@@ -5116,7 +5162,7 @@ namespace Catch {
 
             template <typename DerivedT>
             class ComposableParserImpl : public ParserBase {
-        public:
+            public:
                 template <typename T>
                 auto operator|(T const& other) const -> Parser;
             };
@@ -5124,7 +5170,7 @@ namespace Catch {
             // Common code and state for Args and Opts
             template <typename DerivedT>
             class ParserRefImpl : public ComposableParserImpl<DerivedT> {
-        protected:
+            protected:
                 Optionality m_optionality = Optionality::Optional;
                 std::shared_ptr<BoundRefBase> m_ref;
                 std::string m_hint;
@@ -5135,7 +5181,7 @@ namespace Catch {
                 {
                 }
 
-        public:
+            public:
                 template <typename T>
                 ParserRefImpl(T& ref, std::string const& hint)
                     : m_ref(std::make_shared<BoundRef<T>>(ref))
@@ -5191,7 +5237,7 @@ namespace Catch {
                     return std::make_shared<BoundLambda<LambdaT>>(lambda);
                 }
 
-        public:
+            public:
                 ExeName()
                     : m_name(std::make_shared<std::string>("<executable>"))
                 {
@@ -5229,7 +5275,7 @@ namespace Catch {
             };
 
             class Arg : public ParserRefImpl<Arg> {
-        public:
+            public:
                 using ParserRefImpl::ParserRefImpl;
 
                 auto parse(std::string const&, TokenStream const& tokens) const -> InternalParseResult override
@@ -5262,10 +5308,10 @@ namespace Catch {
             }
 
             class Opt : public ParserRefImpl<Opt> {
-        protected:
+            protected:
                 std::vector<std::string> m_optNames;
 
-        public:
+            public:
                 template <typename LambdaT>
                 explicit Opt(LambdaT const& ref)
                     : ParserRefImpl(std::make_shared<BoundFlagLambda<LambdaT>>(ref))
@@ -5696,8 +5742,8 @@ namespace Catch {
     }
 
 } // end namespace Catch
-// end catch_commandline.cpp
-// start catch_common.cpp
+    // end catch_commandline.cpp
+    // start catch_common.cpp
 
 #include <cstring>
 #include <ostream>
@@ -5795,8 +5841,8 @@ namespace Catch {
     }
 
 } // end namespace Catch
-// end catch_config.cpp
-// start catch_console_colour.cpp
+    // end catch_config.cpp
+    // start catch_console_colour.cpp
 
 #if defined(__clang__)
 #pragma clang diagnostic push
@@ -5808,17 +5854,17 @@ namespace Catch {
 namespace Catch {
 
     class ErrnoGuard {
-public:
+    public:
         ErrnoGuard();
         ~ErrnoGuard();
 
-private:
+    private:
         int m_oldErrno;
     };
 }
 
-// end catch_errno_guard.h
-// start catch_windows_h_proxy.h
+    // end catch_errno_guard.h
+    // start catch_windows_h_proxy.h
 
 #if defined(CATCH_PLATFORM_WINDOWS)
 
@@ -5882,7 +5928,7 @@ namespace Catch {
     namespace {
 
         class Win32ColourImpl : public IColourImpl {
-    public:
+        public:
             Win32ColourImpl()
                 : stdoutHandle(GetStdHandle(STD_OUTPUT_HANDLE))
             {
@@ -5926,7 +5972,7 @@ namespace Catch {
                 }
             }
 
-    private:
+        private:
             void setTextAttribute(WORD _textAttribute) { SetConsoleTextAttribute(stdoutHandle, _textAttribute | originalBackgroundAttributes); }
             HANDLE stdoutHandle;
             WORD originalForegroundAttributes;
@@ -5959,7 +6005,7 @@ namespace Catch {
         // (http://github.com/nanoant)
         // https://github.com/philsquared/Catch/pull/131
         class PosixColourImpl : public IColourImpl {
-    public:
+        public:
             virtual void use(Colour::Code _colourCode) override
             {
                 switch (_colourCode) {
@@ -5998,7 +6044,7 @@ namespace Catch {
                 return &s_instance;
             }
 
-    private:
+        private:
             void setColour(const char* _escapeCode) { Catch::cout() << '\033' << _escapeCode; }
         };
 
@@ -6075,7 +6121,7 @@ namespace Catch {
 
     class Context : public IMutableContext, NonCopyable {
 
-public: // IContext
+    public: // IContext
         virtual IResultCapture* getResultCapture() override { return m_resultCapture; }
         virtual IRunner* getRunner() override { return m_runner; }
 
@@ -6083,14 +6129,14 @@ public: // IContext
 
         virtual ~Context() override;
 
-public: // IMutableContext
+    public: // IMutableContext
         virtual void setResultCapture(IResultCapture* resultCapture) override { m_resultCapture = resultCapture; }
         virtual void setRunner(IRunner* runner) override { m_runner = runner; }
         virtual void setConfig(IConfigPtr const& config) override { m_config = config; }
 
         friend IMutableContext& getCurrentMutableContext();
 
-private:
+    private:
         IConfigPtr m_config;
         IRunner* m_runner = nullptr;
         IResultCapture* m_resultCapture = nullptr;
@@ -6116,10 +6162,10 @@ private:
     IMutableContext::~IMutableContext() = default;
     Context::~Context() = default;
 }
-// end catch_context.cpp
-// start catch_debug_console.cpp
+    // end catch_context.cpp
+    // start catch_debug_console.cpp
 
-// start catch_debug_console.h
+    // start catch_debug_console.h
 
 #include <string>
 
@@ -6142,8 +6188,8 @@ namespace Catch {
     }
 }
 #endif // Platform
-// end catch_debug_console.cpp
-// start catch_debugger.cpp
+    // end catch_debug_console.cpp
+    // start catch_debugger.cpp
 
 #ifdef CATCH_PLATFORM_MAC
 
@@ -6184,7 +6230,8 @@ namespace Catch {
 
         size = sizeof(info);
         if (sysctl(mib, sizeof(mib) / sizeof(*mib), &info, &size, nullptr, 0) != 0) {
-            Catch::cerr() << "\n** Call to sysctl failed - unable to determine if debugger is active **\n" << std::endl;
+            Catch::cerr() << "\n** Call to sysctl failed - unable to determine if debugger is active **\n"
+                          << std::endl;
             return false;
         }
 
@@ -6252,11 +6299,13 @@ namespace Catch {
         if (lhs.size() + rhs.size() < 40 && lhs.find('\n') == std::string::npos && rhs.find('\n') == std::string::npos)
             os << lhs << " " << op << " " << rhs;
         else
-            os << lhs << "\n" << op << "\n" << rhs;
+            os << lhs << "\n"
+               << op << "\n"
+               << rhs;
     }
 }
-// end catch_decomposer.cpp
-// start catch_errno_guard.cpp
+    // end catch_decomposer.cpp
+    // start catch_errno_guard.cpp
 
 #include <cerrno>
 
@@ -6267,10 +6316,10 @@ namespace Catch {
     }
     ErrnoGuard::~ErrnoGuard() { errno = m_oldErrno; }
 }
-// end catch_errno_guard.cpp
-// start catch_exception_translator_registry.cpp
+    // end catch_errno_guard.cpp
+    // start catch_exception_translator_registry.cpp
 
-// start catch_exception_translator_registry.h
+    // start catch_exception_translator_registry.h
 
 #include <memory>
 #include <string>
@@ -6279,13 +6328,13 @@ namespace Catch {
 namespace Catch {
 
     class ExceptionTranslatorRegistry : public IExceptionTranslatorRegistry {
-public:
+    public:
         ~ExceptionTranslatorRegistry();
         virtual void registerTranslator(const IExceptionTranslator* translator);
         virtual std::string translateActiveException() const override;
         std::string tryTranslators() const;
 
-private:
+    private:
         std::vector<std::unique_ptr<IExceptionTranslator const>> m_translators;
     };
 }
@@ -6335,10 +6384,10 @@ namespace Catch {
             return m_translators[0]->translate(m_translators.begin() + 1, m_translators.end());
     }
 }
-// end catch_exception_translator_registry.cpp
-// start catch_fatal_condition.cpp
+    // end catch_exception_translator_registry.cpp
+    // start catch_fatal_condition.cpp
 
-// start catch_fatal_condition.h
+    // start catch_fatal_condition.h
 
 #include <string>
 
@@ -6363,7 +6412,7 @@ namespace Catch {
         static void reset();
         ~FatalConditionHandler();
 
-private:
+    private:
         static bool isSet;
         static ULONG guaranteeSize;
         static PVOID exceptionHandlerHandle;
@@ -6435,7 +6484,10 @@ namespace Catch {
     // Windows can easily distinguish between SO and SigSegV,
     // but SigInt, SigTerm, etc are handled differently.
     static SignalDefs signalDefs[] = {
-        { EXCEPTION_ILLEGAL_INSTRUCTION, "SIGILL - Illegal instruction signal" }, { EXCEPTION_STACK_OVERFLOW, "SIGSEGV - Stack overflow" }, { EXCEPTION_ACCESS_VIOLATION, "SIGSEGV - Segmentation violation signal" }, { EXCEPTION_INT_DIVIDE_BY_ZERO, "Divide by zero error" },
+        { EXCEPTION_ILLEGAL_INSTRUCTION, "SIGILL - Illegal instruction signal" },
+        { EXCEPTION_STACK_OVERFLOW, "SIGSEGV - Stack overflow" },
+        { EXCEPTION_ACCESS_VIOLATION, "SIGSEGV - Segmentation violation signal" },
+        { EXCEPTION_INT_DIVIDE_BY_ZERO, "Divide by zero error" },
     };
 
     LONG CALLBACK FatalConditionHandler::handleVectoredException(PEXCEPTION_POINTERS ExceptionInfo)
@@ -6597,10 +6649,10 @@ namespace Catch {
         using Reporters = std::vector<IStreamingReporterPtr>;
         Reporters m_reporters;
 
-public:
+    public:
         void add(IStreamingReporterPtr&& reporter);
 
-public: // IStreamingReporter
+    public: // IStreamingReporter
         ReporterPreferences getPreferences() const override;
 
         void noMatchingTestCases(std::string const& spec) override;
@@ -6787,14 +6839,16 @@ namespace Catch {
 
 #else
 
-    LeakDetector::LeakDetector() {}
+    LeakDetector::LeakDetector()
+    {
+    }
 
 #endif
 }
-// end catch_leak_detector.cpp
-// start catch_list.cpp
+    // end catch_leak_detector.cpp
+    // start catch_list.cpp
 
-// start catch_list.h
+    // start catch_list.h
 
 #include <set>
 
@@ -6862,9 +6916,11 @@ namespace Catch {
         }
 
         if (!config.testSpec().hasFilters())
-            Catch::cout() << pluralise(matchedTestCases.size(), "test case") << '\n' << std::endl;
+            Catch::cout() << pluralise(matchedTestCases.size(), "test case") << '\n'
+                          << std::endl;
         else
-            Catch::cout() << pluralise(matchedTestCases.size(), "matching test case") << '\n' << std::endl;
+            Catch::cout() << pluralise(matchedTestCases.size(), "matching test case") << '\n'
+                          << std::endl;
         return matchedTestCases.size();
     }
 
@@ -6931,7 +6987,8 @@ namespace Catch {
             auto wrapper = Column(tagCount.second.all()).initialIndent(0).indent(oss.str().size()).width(CATCH_CONFIG_CONSOLE_WIDTH - 10);
             Catch::cout() << oss.str() << wrapper << '\n';
         }
-        Catch::cout() << pluralise(tagCounts.size(), "tag") << '\n' << std::endl;
+        Catch::cout() << pluralise(tagCounts.size(), "tag") << '\n'
+                      << std::endl;
         return tagCounts.size();
     }
 
@@ -6982,7 +7039,7 @@ namespace Catch {
             MatcherUntypedBase::~MatcherUntypedBase() = default;
 
         } // namespace Impl
-    }     // namespace Matchers
+    } // namespace Matchers
 
     using namespace Matchers;
     using Matchers::Impl::MatcherBase;
@@ -7103,10 +7160,10 @@ namespace Catch {
     }
 
 } // end namespace Catch
-// end catch_message.cpp
-// start catch_random_number_generator.cpp
+    // end catch_message.cpp
+    // start catch_random_number_generator.cpp
 
-// start catch_random_number_generator.h
+    // start catch_random_number_generator.h
 
 #include <algorithm>
 
@@ -7151,10 +7208,10 @@ namespace Catch {
     RandomNumberGenerator::result_type RandomNumberGenerator::operator()(result_type n) const { return std::rand() % n; }
     RandomNumberGenerator::result_type RandomNumberGenerator::operator()() const { return std::rand() % (max)(); }
 }
-// end catch_random_number_generator.cpp
-// start catch_registry_hub.cpp
+    // end catch_random_number_generator.cpp
+    // start catch_registry_hub.cpp
 
-// start catch_test_case_registry_impl.h
+    // start catch_test_case_registry_impl.h
 
 #include <algorithm>
 #include <ios>
@@ -7175,7 +7232,7 @@ namespace Catch {
     std::vector<TestCase> const& getAllTestCasesSorted(IConfig const& config);
 
     class TestRegistry : public ITestCaseRegistry {
-public:
+    public:
         virtual ~TestRegistry() = default;
 
         virtual void registerTest(TestCase const& testCase);
@@ -7183,7 +7240,7 @@ public:
         std::vector<TestCase> const& getAllTests() const override;
         std::vector<TestCase> const& getAllTestsSorted(IConfig const& config) const override;
 
-private:
+    private:
         std::vector<TestCase> m_functions;
         mutable RunTests::InWhatOrder m_currentSortOrder = RunTests::InDeclarationOrder;
         mutable std::vector<TestCase> m_sortedFunctions;
@@ -7196,7 +7253,7 @@ private:
     class TestInvokerAsFunction : public ITestInvoker {
         void (*m_testAsFunction)();
 
-public:
+    public:
         TestInvokerAsFunction(void (*testAsFunction)()) noexcept;
 
         void invoke() const override;
@@ -7208,8 +7265,8 @@ public:
 
 } // end namespace Catch
 
-// end catch_test_case_registry_impl.h
-// start catch_reporter_registry.h
+    // end catch_test_case_registry_impl.h
+    // start catch_reporter_registry.h
 
 #include <map>
 
@@ -7217,7 +7274,7 @@ namespace Catch {
 
     class ReporterRegistry : public IReporterRegistry {
 
-public:
+    public:
         ~ReporterRegistry() override;
 
         IStreamingReporterPtr create(std::string const& name, IConfigPtr const& config) const override;
@@ -7228,16 +7285,16 @@ public:
         FactoryMap const& getFactories() const override;
         Listeners const& getListeners() const override;
 
-private:
+    private:
         FactoryMap m_factories;
         Listeners m_listeners;
     };
 }
 
-// end catch_reporter_registry.h
-// start catch_tag_alias_registry.h
+    // end catch_reporter_registry.h
+    // start catch_tag_alias_registry.h
 
-// start catch_tag_alias.h
+    // start catch_tag_alias.h
 
 #include <string>
 
@@ -7258,20 +7315,20 @@ namespace Catch {
 namespace Catch {
 
     class TagAliasRegistry : public ITagAliasRegistry {
-public:
+    public:
         ~TagAliasRegistry() override;
         TagAlias const* find(std::string const& alias) const override;
         std::string expandAliases(std::string const& unexpandedTestSpec) const override;
         void add(std::string const& alias, std::string const& tag, SourceLineInfo const& lineInfo);
 
-private:
+    private:
         std::map<std::string, TagAlias> m_registry;
     };
 
 } // end namespace Catch
 
-// end catch_tag_alias_registry.h
-// start catch_startup_exception_registry.h
+    // end catch_tag_alias_registry.h
+    // start catch_startup_exception_registry.h
 
 #include <exception>
 #include <vector>
@@ -7279,11 +7336,11 @@ private:
 namespace Catch {
 
     class StartupExceptionRegistry {
-public:
+    public:
         void add(std::exception_ptr const& exception) noexcept;
         std::vector<std::exception_ptr> const& getExceptions() const noexcept;
 
-private:
+    private:
         std::vector<std::exception_ptr> m_exceptions;
     };
 
@@ -7296,7 +7353,7 @@ namespace Catch {
 
         class RegistryHub : public IRegistryHub, public IMutableRegistryHub, private NonCopyable {
 
-    public: // IRegistryHub
+        public: // IRegistryHub
             RegistryHub() = default;
             IReporterRegistry const& getReporterRegistry() const override { return m_reporterRegistry; }
             ITestCaseRegistry const& getTestCaseRegistry() const override { return m_testCaseRegistry; }
@@ -7304,7 +7361,7 @@ namespace Catch {
             ITagAliasRegistry const& getTagAliasRegistry() const override { return m_tagAliasRegistry; }
             StartupExceptionRegistry const& getStartupExceptionRegistry() const override { return m_exceptionRegistry; }
 
-    public: // IMutableRegistryHub
+        public: // IMutableRegistryHub
             void registerReporter(std::string const& name, IReporterFactoryPtr const& factory) override { m_reporterRegistry.registerReporter(name, factory); }
             void registerListener(IReporterFactoryPtr const& factory) override { m_reporterRegistry.registerListener(factory); }
             void registerTest(TestCase const& testInfo) override { m_testCaseRegistry.registerTest(testInfo); }
@@ -7312,7 +7369,7 @@ namespace Catch {
             void registerTagAlias(std::string const& alias, std::string const& tag, SourceLineInfo const& lineInfo) override { m_tagAliasRegistry.add(alias, tag, lineInfo); }
             void registerStartupException() noexcept override { m_exceptionRegistry.add(std::current_exception()); }
 
-    private:
+        private:
             TestRegistry m_testCaseRegistry;
             ReporterRegistry m_reporterRegistry;
             ExceptionTranslatorRegistry m_exceptionTranslatorRegistry;
@@ -7377,9 +7434,9 @@ namespace Catch {
     bool shouldSuppressFailure(int flags) { return (flags & ResultDisposition::SuppressFail) != 0; }
 
 } // end namespace Catch
-// end catch_result_type.cpp
-// start catch_run_context.cpp
-// start catch_run_context.h
+    // end catch_result_type.cpp
+    // start catch_run_context.cpp
+    // start catch_run_context.h
 
 #include <string>
 
@@ -7389,12 +7446,12 @@ namespace Catch {
 
     class StreamRedirect {
 
-public:
+    public:
         StreamRedirect(std::ostream& stream, std::string& targetString);
 
         ~StreamRedirect();
 
-private:
+    private:
         std::ostream& m_stream;
         std::streambuf* m_prevBuf;
         std::ostringstream m_oss;
@@ -7405,11 +7462,11 @@ private:
     // This means that we need to redirect 2 streams into 1 to keep proper
     // order of writes and cannot use StreamRedirect on its own
     class StdErrRedirect {
-public:
+    public:
         StdErrRedirect(std::string& targetString);
         ~StdErrRedirect();
 
-private:
+    private:
         std::streambuf* m_cerrBuf;
         std::streambuf* m_clogBuf;
         std::ostringstream m_oss;
@@ -7420,7 +7477,7 @@ private:
 
     class RunContext : public IResultCapture, public IRunner {
 
-public:
+    public:
         RunContext(RunContext const&) = delete;
         RunContext& operator=(RunContext const&) = delete;
 
@@ -7436,7 +7493,7 @@ public:
         IConfigPtr config() const;
         IStreamingReporter& reporter() const;
 
-private: // IResultCapture
+    private: // IResultCapture
         void assertionStarting(AssertionInfo const& info) override;
         void assertionEnded(AssertionResult const& result) override;
 
@@ -7466,15 +7523,15 @@ private: // IResultCapture
 
         void assertionRun() override;
 
-public:
+    public:
         // !TBD We need to do this another way!
         bool aborting() const override;
 
-private:
+    private:
         void runCurrentTest(std::string& redirectedCout, std::string& redirectedCerr);
         void invokeActiveTestCase();
 
-private:
+    private:
         void handleUnfinishedSections();
 
         TestRunInfo m_runInfo;
@@ -7499,7 +7556,7 @@ private:
 
 } // end namespace Catch
 
-// end catch_run_context.h
+    // end catch_run_context.h
 
 #include <algorithm>
 #include <cassert>
@@ -7851,17 +7908,17 @@ namespace Catch {
     }
 
 } // end namespace Catch
-// end catch_section_info.cpp
-// start catch_session.cpp
+    // end catch_section_info.cpp
+    // start catch_session.cpp
 
-// start catch_session.h
+    // start catch_session.h
 
 #include <memory>
 
 namespace Catch {
 
     class Session : NonCopyable {
-public:
+    public:
         Session();
         ~Session() override;
 
@@ -7883,7 +7940,7 @@ public:
         ConfigData& configData();
         Config& config();
 
-private:
+    private:
         int runInternal();
 
         clara::Parser m_cli;
@@ -7894,8 +7951,8 @@ private:
 
 } // end namespace Catch
 
-// end catch_session.h
-// start catch_version.h
+    // end catch_session.h
+    // start catch_version.h
 
 #include <iosfwd>
 
@@ -7927,9 +7984,9 @@ namespace Catch {
 
 namespace {
     const int MaxExitCode = 255;
-    using Catch::IStreamingReporterPtr;
-    using Catch::IConfigPtr;
     using Catch::Config;
+    using Catch::IConfigPtr;
+    using Catch::IStreamingReporterPtr;
 
     IStreamingReporterPtr createReporter(std::string const& reporterName, IConfigPtr const& config)
     {
@@ -8050,7 +8107,10 @@ namespace Catch {
     }
     Session::~Session() { Catch::cleanUp(); }
 
-    void Session::showHelp() const { Catch::cout() << "\nCatch v" << libraryVersion() << "\n" << m_cli << std::endl << "For more detailed usage please see the project docs\n" << std::endl; }
+    void Session::showHelp() const { Catch::cout() << "\nCatch v" << libraryVersion() << "\n"
+                                                   << m_cli << std::endl
+                                                   << "For more detailed usage please see the project docs\n"
+                                                   << std::endl; }
     void Session::libIdentify()
     {
         Catch::cout() << std::left << std::setw(16) << "description: "
@@ -8069,8 +8129,10 @@ namespace Catch {
 
         auto result = m_cli.parse(clara::Args(argc, argv));
         if (!result) {
-            Catch::cerr() << Colour(Colour::Red) << "\nError(s) in input:\n" << Column(result.errorMessage()).indent(2) << "\n\n";
-            Catch::cerr() << "Run with -? for usage\n" << std::endl;
+            Catch::cerr() << Colour(Colour::Red) << "\nError(s) in input:\n"
+                          << Column(result.errorMessage()).indent(2) << "\n\n";
+            Catch::cerr() << "Run with -? for usage\n"
+                          << std::endl;
             return MaxExitCode;
         }
 
@@ -8191,8 +8253,8 @@ namespace Catch {
     std::vector<std::exception_ptr> const& StartupExceptionRegistry::getExceptions() const noexcept { return m_exceptions; }
 
 } // end namespace Catch
-// end catch_startup_exception_registry.cpp
-// start catch_stream.cpp
+    // end catch_startup_exception_registry.cpp
+    // start catch_stream.cpp
 
 #include <cstdio>
 #include <iostream>
@@ -8205,12 +8267,12 @@ namespace Catch {
         char data[bufferSize];
         WriterF m_writer;
 
-public:
+    public:
         StreamBufImpl() { setp(data, data + sizeof(data)); }
 
         ~StreamBufImpl() noexcept { StreamBufImpl::sync(); }
 
-private:
+    private:
         int overflow(int c) override
         {
             sync();
@@ -8269,7 +8331,10 @@ private:
     std::ostream& CoutStream::stream() const { return m_os; }
 
 #ifndef CATCH_CONFIG_NOSTDOUT // If you #define this you must implement these functions
-    std::ostream& cout() { return std::cout; }
+    std::ostream& cout()
+    {
+        return std::cout;
+    }
     std::ostream& cerr() { return std::cerr; }
     std::ostream& clog() { return std::clog; }
 #endif
@@ -8280,8 +8345,8 @@ private:
 namespace Catch {
     StreamBufBase::~StreamBufBase() = default;
 }
-// end catch_streambuf.cpp
-// start catch_string_manip.cpp
+    // end catch_streambuf.cpp
+    // start catch_string_manip.cpp
 
 #include <algorithm>
 #include <cctype>
@@ -8341,8 +8406,8 @@ namespace Catch {
         return os;
     }
 }
-// end catch_string_manip.cpp
-// start catch_stringref.cpp
+    // end catch_string_manip.cpp
+    // start catch_stringref.cpp
 
 #if defined(__clang__)
 #pragma clang diagnostic push
@@ -8544,7 +8609,8 @@ namespace Catch {
 
     void TagAliasRegistry::add(std::string const& alias, std::string const& tag, SourceLineInfo const& lineInfo)
     {
-        CATCH_ENFORCE(startsWith(alias, "[@") && endsWith(alias, ']'), "error: tag alias, '" << alias << "' is not of the form [@alias name].\n" << lineInfo);
+        CATCH_ENFORCE(startsWith(alias, "[@") && endsWith(alias, ']'), "error: tag alias, '" << alias << "' is not of the form [@alias name].\n"
+                                                                                             << lineInfo);
 
         CATCH_ENFORCE(m_registry.insert(std::make_pair(alias, TagAlias(tag, lineInfo))).second,
             "error: tag alias, '" << alias << "' already registered.\n"
@@ -8557,8 +8623,8 @@ namespace Catch {
     ITagAliasRegistry const& ITagAliasRegistry::get() { return getRegistryHub().getTagAliasRegistry(); }
 
 } // end namespace Catch
-// end catch_tag_alias_registry.cpp
-// start catch_test_case_info.cpp
+    // end catch_tag_alias_registry.cpp
+    // start catch_test_case_info.cpp
 
 #include <algorithm>
 #include <cctype>
@@ -8698,8 +8764,8 @@ namespace Catch {
     TestCaseInfo const& TestCase::getTestCaseInfo() const { return *this; }
 
 } // end namespace Catch
-// end catch_test_case_info.cpp
-// start catch_test_case_registry_impl.cpp
+    // end catch_test_case_info.cpp
+    // start catch_test_case_registry_impl.cpp
 
 #include <sstream>
 
@@ -8795,8 +8861,8 @@ namespace Catch {
     }
 
 } // end namespace Catch
-// end catch_test_case_registry_impl.cpp
-// start catch_test_case_tracker.cpp
+    // end catch_test_case_registry_impl.cpp
+    // start catch_test_case_tracker.cpp
 
 #include <algorithm>
 #include <assert.h>
@@ -9051,9 +9117,9 @@ namespace Catch {
     } // namespace TestCaseTracking
 
     using TestCaseTracking::ITracker;
-    using TestCaseTracking::TrackerContext;
-    using TestCaseTracking::SectionTracker;
     using TestCaseTracking::IndexTracker;
+    using TestCaseTracking::SectionTracker;
+    using TestCaseTracking::TrackerContext;
 
 } // namespace Catch
 
@@ -9085,8 +9151,8 @@ namespace Catch {
 
     AutoReg::~AutoReg() = default;
 }
-// end catch_test_registry.cpp
-// start catch_test_spec.cpp
+    // end catch_test_registry.cpp
+    // start catch_test_spec.cpp
 
 #include <algorithm>
 #include <memory>
@@ -9231,8 +9297,8 @@ namespace Catch {
     TestSpec parseTestSpec(std::string const& arg) { return TestSpecParser(ITagAliasRegistry::get()).parse(arg).testSpec(); }
 
 } // namespace Catch
-// end catch_test_spec_parser.cpp
-// start catch_timer.cpp
+    // end catch_test_spec_parser.cpp
+    // start catch_timer.cpp
 
 #include <chrono>
 
@@ -9274,8 +9340,8 @@ namespace Catch {
     auto Timer::getElapsedSeconds() const -> double { return getElapsedMicroseconds() / 1000000.0; }
 
 } // namespace Catch
-// end catch_timer.cpp
-// start catch_tostring.cpp
+    // end catch_timer.cpp
+    // start catch_tostring.cpp
 
 #if defined(__clang__)
 #pragma clang diagnostic push
@@ -9295,7 +9361,8 @@ namespace Catch {
             const int hexThreshold = 255;
 
             struct Endianness {
-                enum Arch { Big, Little };
+                enum Arch { Big,
+                    Little };
 
                 static Arch which()
                 {
@@ -9527,8 +9594,8 @@ namespace Catch {
         return diff;
     }
 }
-// end catch_totals.cpp
-// start catch_version.cpp
+    // end catch_totals.cpp
+    // start catch_version.cpp
 
 #include <ostream>
 
@@ -9596,10 +9663,10 @@ namespace Catch {
 
     std::string WildcardPattern::adjustCase(std::string const& str) const { return m_caseSensitivity == CaseSensitive::No ? toLower(str) : str; }
 }
-// end catch_wildcard_pattern.cpp
-// start catch_xmlwriter.cpp
+    // end catch_wildcard_pattern.cpp
+    // start catch_xmlwriter.cpp
 
-// start catch_xmlwriter.h
+    // start catch_xmlwriter.h
 
 #include <sstream>
 #include <vector>
@@ -9607,8 +9674,9 @@ namespace Catch {
 namespace Catch {
 
     class XmlEncode {
-public:
-        enum ForWhat { ForTextNodes, ForAttributes };
+    public:
+        enum ForWhat { ForTextNodes,
+            ForAttributes };
 
         XmlEncode(std::string const& str, ForWhat forWhat = ForTextNodes);
 
@@ -9616,15 +9684,15 @@ public:
 
         friend std::ostream& operator<<(std::ostream& os, XmlEncode const& xmlEncode);
 
-private:
+    private:
         std::string m_str;
         ForWhat m_forWhat;
     };
 
     class XmlWriter {
-public:
-        class ScopedElement {
     public:
+        class ScopedElement {
+        public:
             ScopedElement(XmlWriter* writer);
 
             ScopedElement(ScopedElement&& other) noexcept;
@@ -9641,7 +9709,7 @@ public:
                 return *this;
             }
 
-    private:
+        private:
             mutable XmlWriter* m_writer = nullptr;
         };
 
@@ -9680,7 +9748,7 @@ public:
 
         void ensureTagClosed();
 
-private:
+    private:
         void writeDeclaration();
 
         void newlineIfNecessary();
@@ -9892,8 +9960,8 @@ namespace Catch {
         }
     }
 }
-// end catch_xmlwriter.cpp
-// start catch_reporter_bases.cpp
+    // end catch_xmlwriter.cpp
+    // start catch_reporter_bases.cpp
 
 #include <assert.h>
 #include <cfloat>
@@ -9941,10 +10009,16 @@ namespace Catch {
 namespace {
 
 #ifdef CATCH_PLATFORM_MAC
-    const char* failedString() { return "FAILED"; }
+    const char* failedString()
+    {
+        return "FAILED";
+    }
     const char* passedString() { return "PASSED"; }
 #else
-    const char* failedString() { return "failed"; }
+    const char* failedString()
+    {
+        return "failed";
+    }
     const char* passedString() { return "passed"; }
 #endif
 
@@ -10005,13 +10079,14 @@ namespace Catch {
         void testRunEnded(TestRunStats const& _testRunStats) override
         {
             printTotals(_testRunStats.totals);
-            stream << '\n' << std::endl;
+            stream << '\n'
+                   << std::endl;
             StreamingReporterBase::testRunEnded(_testRunStats);
         }
 
-private:
+    private:
         class AssertionPrinter {
-    public:
+        public:
             AssertionPrinter& operator=(AssertionPrinter const&) = delete;
             AssertionPrinter(AssertionPrinter const&) = delete;
             AssertionPrinter(std::ostream& _stream, AssertionStats const& _stats, bool _printInfoMessages)
@@ -10092,7 +10167,7 @@ private:
                 }
             }
 
-    private:
+        private:
             void printSourceInfo() const
             {
                 Colour colourGuard(Colour::FileName);
@@ -10176,7 +10251,7 @@ private:
                 }
             }
 
-    private:
+        private:
             std::ostream& stream;
             AssertionResult const& result;
             std::vector<MessageInfo> messages;
@@ -10220,17 +10295,17 @@ private:
     CATCH_REGISTER_REPORTER("compact", CompactReporter)
 
 } // end namespace Catch
-// end catch_reporter_compact.cpp
-// start catch_reporter_console.cpp
+    // end catch_reporter_compact.cpp
+    // start catch_reporter_console.cpp
 
 #include <cfloat>
 #include <cstdio>
 
 #if defined(_MSC_VER)
 #pragma warning(push)
-#pragma warning(disable : 4061) // Not all labels are EXPLICITLY handled in switch
-                                // Note that 4062 (not all labels are handled
-                                // and default is missing) is enabled
+#pragma warning(disable : 4061) // Not all labels are EXPLICITLY handled in switch \
+    // Note that 4062 (not all labels are handled                                  \
+    // and default is missing) is enabled
 #endif
 
 namespace Catch {
@@ -10253,7 +10328,8 @@ namespace Catch {
         }
 
         struct ColumnInfo {
-            enum Justification { Left, Right };
+            enum Justification { Left,
+                Right };
             std::string name;
             int width;
             Justification justification;
@@ -10270,7 +10346,7 @@ namespace Catch {
             int m_currentColumn = -1;
             bool m_isOpen = false;
 
-    public:
+        public:
             TablePrinter(std::ostream& os, std::vector<ColumnInfo> const& columnInfos)
                 : m_os(os)
                 , m_columnInfos(columnInfos)
@@ -10339,7 +10415,12 @@ namespace Catch {
         };
 
         class Duration {
-            enum class Unit { Auto, Nanoseconds, Microseconds, Milliseconds, Seconds, Minutes };
+            enum class Unit { Auto,
+                Nanoseconds,
+                Microseconds,
+                Milliseconds,
+                Seconds,
+                Minutes };
             static const uint64_t s_nanosecondsInAMicrosecond = 1000;
             static const uint64_t s_nanosecondsInAMillisecond = 1000 * s_nanosecondsInAMicrosecond;
             static const uint64_t s_nanosecondsInASecond = 1000 * s_nanosecondsInAMillisecond;
@@ -10348,7 +10429,7 @@ namespace Catch {
             uint64_t m_inNanoseconds;
             Unit m_units;
 
-    public:
+        public:
             Duration(uint64_t inNanoseconds, Unit units = Unit::Auto)
                 : m_inNanoseconds(inNanoseconds)
                 , m_units(units)
@@ -10451,7 +10532,8 @@ namespace Catch {
                     stream << "\nNo assertions in section";
                 else
                     stream << "\nNo assertions in test case";
-                stream << " '" << _sectionStats.sectionInfo.name << "'\n" << std::endl;
+                stream << " '" << _sectionStats.sectionInfo.name << "'\n"
+                       << std::endl;
             }
             if (m_config->showDurations() == ShowDurations::Always) {
                 stream << getFormattedDuration(_sectionStats.durationInSeconds) << " s: " << _sectionStats.sectionInfo.name << std::endl;
@@ -10496,7 +10578,8 @@ namespace Catch {
                 printSummaryDivider();
                 stream << "Summary for group '" << _testGroupStats.groupInfo.name << "':\n";
                 printTotals(_testGroupStats.totals);
-                stream << '\n' << std::endl;
+                stream << '\n'
+                       << std::endl;
             }
             StreamingReporterBase::testGroupEnded(_testGroupStats);
         }
@@ -10508,9 +10591,9 @@ namespace Catch {
             StreamingReporterBase::testRunEnded(_testRunStats);
         }
 
-private:
+    private:
         class AssertionPrinter {
-    public:
+        public:
             AssertionPrinter& operator=(AssertionPrinter const&) = delete;
             AssertionPrinter(AssertionPrinter const&) = delete;
             AssertionPrinter(std::ostream& _stream, AssertionStats const& _stats, bool _printInfoMessages)
@@ -10603,7 +10686,7 @@ private:
                 printMessage();
             }
 
-    private:
+        private:
             void printResultType() const
             {
                 if (!passOrFail.empty()) {
@@ -10677,7 +10760,8 @@ private:
         }
         void lazyPrintRunInfo()
         {
-            stream << '\n' << getLineOfChars<'~'>() << '\n';
+            stream << '\n'
+                   << getLineOfChars<'~'>() << '\n';
             Colour colour(Colour::SecondaryText);
             stream << currentTestRunInfo->name << " is a Catch v" << libraryVersion() << " host application.\n"
                    << "Run with -? for options\n\n";
@@ -10715,7 +10799,8 @@ private:
                 Colour colourGuard(Colour::FileName);
                 stream << lineInfo << '\n';
             }
-            stream << getLineOfChars<'.'>() << '\n' << std::endl;
+            stream << getLineOfChars<'.'>() << '\n'
+                   << std::endl;
         }
 
         void printClosedHeader(std::string const& _name)
@@ -10832,7 +10917,7 @@ private:
         }
         void printSummaryDivider() { stream << getLineOfChars<'-'>() << '\n'; }
 
-private:
+    private:
         bool m_headerPrinted = false;
     };
 
@@ -10845,8 +10930,8 @@ private:
 #if defined(_MSC_VER)
 #pragma warning(pop)
 #endif
-// end catch_reporter_console.cpp
-// start catch_reporter_junit.cpp
+    // end catch_reporter_console.cpp
+    // start catch_reporter_junit.cpp
 
 #include <assert.h>
 
@@ -10893,7 +10978,7 @@ namespace Catch {
     }
 
     class JunitReporter : public CumulativeReporterBase<JunitReporter> {
-public:
+    public:
         JunitReporter(ReporterConfig const& _config)
             : CumulativeReporterBase(_config)
             , xml(_config.stream())
@@ -11188,19 +11273,19 @@ namespace Catch {
     bool MultipleReporters::isMulti() const { return true; }
 
 } // end namespace Catch
-// end catch_reporter_multi.cpp
-// start catch_reporter_xml.cpp
+    // end catch_reporter_multi.cpp
+    // start catch_reporter_xml.cpp
 
 #if defined(_MSC_VER)
 #pragma warning(push)
-#pragma warning(disable : 4061) // Not all labels are EXPLICITLY handled in switch
-                                // Note that 4062 (not all labels are handled
-                                // and default is missing) is enabled
+#pragma warning(disable : 4061) // Not all labels are EXPLICITLY handled in switch \
+    // Note that 4062 (not all labels are handled                                  \
+    // and default is missing) is enabled
 #endif
 
 namespace Catch {
     class XmlReporter : public StreamingReporterBase<XmlReporter> {
-public:
+    public:
         XmlReporter(ReporterConfig const& _config)
             : StreamingReporterBase(_config)
             , m_xml(_config.stream())
@@ -11216,7 +11301,7 @@ public:
 
         void writeSourceInfo(SourceLineInfo const& sourceInfo) { m_xml.writeAttribute("filename", sourceInfo.file).writeAttribute("line", sourceInfo.line); }
 
-public: // StreamingReporterBase
+    public: // StreamingReporterBase
         void noMatchingTestCases(std::string const& s) override { StreamingReporterBase::noMatchingTestCases(s); }
 
         void testRunStarting(TestRunInfo const& testInfo) override
@@ -11376,7 +11461,7 @@ public: // StreamingReporterBase
             m_xml.endElement();
         }
 
-private:
+    private:
         Timer m_testCaseTimer;
         XmlWriter m_xml;
         int m_sectionDepth = 0;
@@ -11404,7 +11489,7 @@ namespace Catch {
 #endif
 
 #ifdef CATCH_CONFIG_MAIN
-// start catch_default_main.hpp
+    // start catch_default_main.hpp
 
 #ifndef __OBJC__
 
