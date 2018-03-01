@@ -1,9 +1,5 @@
 /* src/screen.cpp
  * 
- * The screen.cpp file is responsible for defining all the functions necessary to handle
- * user input and output to the screen. This file is (almost) the core of the whole 
- * editor.
- *
  * The header file can be found in 'include/screen.hpp'
  */
 #include <ncurses.h>
@@ -141,10 +137,10 @@ void Djinni::Screen::handle_keypress(int key)
             current_buffer->cursor_y++;
         }
         break;
-	case KEY_RESIZE:
-		// Stop the resize signal from printing '~Z' to the 
-		// line buffer whenever the window is resized
-		break;
+    case KEY_RESIZE:
+        // Stop the resize signal from printing '~Z' to the
+        // line buffer whenever the window is resized
+        break;
     default:
         // Quick fix to prevent non-printable characters from being printed
         if (key < 32) {

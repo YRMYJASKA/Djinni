@@ -1,3 +1,11 @@
+/* include/file.hpp
+ *
+ * The purpose of the file class is to store all the relevant 
+ * information about the buffer/file at hand. Also include functions
+ * like 'save_file' and 'load_file'
+ *
+ * The source can be found in 'src/file.cpp'
+ */
 #pragma once
 
 #include <string>

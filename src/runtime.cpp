@@ -1,5 +1,9 @@
-#include <string>
+/* src/runtime.cpp
+ *
+ * The header can be found in 'include/runtime.hpp'
+ */
 
+#include <string>
 #include <runtime.hpp>
 
 namespace Djinni {

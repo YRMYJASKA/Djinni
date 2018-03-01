@@ -1,3 +1,8 @@
+/* src/settings.cpp
+ *
+ * The header can be found in 'include/settings.hpp'
+ */
+
 #include <settings.hpp>
 
 namespace Djinni {

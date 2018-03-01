@@ -1,5 +1,4 @@
 /* src/cmdline.cpp
- * The source file of the command line functionality for Djinni. 
  *
  * The header can be found in 'include/cmdline.hpp'
  */

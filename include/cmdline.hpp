@@ -1,4 +1,5 @@
 /* include/cmdline.hpp
+ *
  * Header for the command line in Djinni.
  * The command line is used by the user to pass commands that will be interpreted
  * inside Djinni. Commands can include e.g. 'save', 'open' or 'find'. These commands can take 

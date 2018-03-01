@@ -1,3 +1,7 @@
+/* src/file.cpp
+ *
+ * The header can be found in 'include/file.hpp'
+ */
 #include <fstream>
 #include <iostream>
 #include <string>

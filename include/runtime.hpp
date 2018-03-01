@@ -1,3 +1,10 @@
+/* include/runtime.cpp
+ *
+ * This namespace includes all the running time variables that are only
+ * needed during runtime.
+ *
+ * The source can be found in 'src/runtime.cpp'
+ */
 #pragma once
 
 #include <string>

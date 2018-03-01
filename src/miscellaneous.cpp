@@ -1,3 +1,7 @@
+/* src/miscellaneous.cpp
+ *
+ * The header can be found in 'include/miscellaneous.hpp'
+ */
 #include <iostream>
 
 #include <miscellaneous.hpp>
