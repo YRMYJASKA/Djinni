@@ -3,8 +3,8 @@
  * The header can be found in 'include/runtime.hpp'
  */
 
-#include <string>
 #include <runtime.hpp>
+#include <string>
 
 namespace Djinni {
 namespace Runtime {

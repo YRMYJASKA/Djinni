@@ -12,7 +12,7 @@
 #include <runtime.hpp>
 #include <screen.hpp>
 
-// TODO: remove test_func which was for debugging purposes 
+// TODO: remove test_func which was for debugging purposes
 void test_func(std::vector<std::string>& x) { Djinni::Runtime::echo = x[1]; }
 
 namespace Djinni {
@@ -71,16 +71,16 @@ void Djinni::Commandline::process_command(const char* cmd)
             buffer += cmd[i];
         }
     }
-	// Append the final token 
+    // Append the final token
     tokens.push_back(buffer);
 
     // Check if command was empty and if so: do nothing
     if (!(tokens[0] == "")) {
         // Execute the command given
         exec_command(tokens);
-    } 
-	
-	// Finally quit the command line routine and return to basic Djinni
+    }
+
+    // Finally quit the command line routine and return to basic Djinni
     cmdline_running = false;
 }
 
