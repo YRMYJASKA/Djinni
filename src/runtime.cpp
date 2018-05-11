@@ -12,5 +12,6 @@ namespace Runtime {
     unsigned int line_digits;
     unsigned int line_offset = 0;
     std::string echo = "";
+	int echo_status = 0;
 }
 }

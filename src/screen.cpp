@@ -52,8 +52,13 @@ void Djinni::Screen::update_screen()
     mvprintw(MAX_Y - 1, 0, "%s   ", current_buffer->get_filename().c_str());
     printw("%d, %d", current_buffer->cursor_x + 1, current_buffer->cursor_y + 1);
 
-    // Print the last output of the command line
+    // Print the echo with the correct colours
+	attron(COLOR_PAIR(Djinni::Runtime::echo_status));
     mvprintw(MAX_Y - 2, 0, "%s", Djinni::Runtime::echo.c_str());
+	attroff(COLOR_PAIR(Djinni::Runtime::echo_status));
+	Djinni::Runtime::echo_status = 0;
+	Djinni::Runtime::echo = "";
+
 
     // Move the cursor to it's correct place and refresh the screen
     move(current_buffer->cursor_y - Djinni::Runtime::line_offset, current_buffer->cursor_x + Djinni::Runtime::line_digits + 3);
@@ -71,9 +76,9 @@ void Djinni::Screen::handle_keypress(int key)
     case 2:
         Djinni::Runtime::running = false;
         break;
-    // Ctrl-S -> save the file
+    // Ctrl-S -> save the current file
     case 19:
-        current_buffer->save_file(current_buffer->get_filename());
+		Djinni::Commandline::process_command("save");
         break;
     // Ctrl-D -> Open command line for Djinni
     case 4:

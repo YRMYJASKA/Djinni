@@ -27,6 +27,8 @@
 #include <ncurses.h>
 #include <string.h>
 
+#include <cmdline.hpp>
+#include <commands.hpp>
 #include <file.hpp>
 #include <miscellaneous.hpp>
 #include <runtime.hpp>
@@ -54,12 +56,19 @@ int main(int argc, char* argv[])
         buffer.set_filename("Untitled");
     }
 
+    // Load all the commands into the command list
+    Djinni::init_core_commands();
+    Djinni::Commandline::command_list.insert(std::end(Djinni::Commandline::command_list), std::begin(Djinni::core_commands), std::end(Djinni::core_commands));
+
     // Initialize the program with the correct ncurses commands
     initscr();
     noecho();
     raw();
     keypad(stdscr, TRUE);
     start_color();
+
+	// Initialize the colour pairs
+	init_pair(1, COLOR_WHITE, COLOR_RED);
 
     // Initialize the line buffer for the file
     Djinni::Screen::current_buffer = &buffer;

@@ -3,7 +3,7 @@
  * Header for the command line in Djinni.
  * The command line is used by the user to pass commands that will be interpreted
  * inside Djinni. Commands can include e.g. 'save', 'open' or 'find'. These commands can take 
- * arguments after the command. eg. '>find foo'
+ * arguments after the command. e.g. '>find foo'
  *
  * The source can be found in 'src/cmdline.cpp'
  */

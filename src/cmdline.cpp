@@ -9,11 +9,9 @@
 #include <vector>
 
 #include <cmdline.hpp>
+#include <commands.hpp>
 #include <runtime.hpp>
 #include <screen.hpp>
-
-// TODO: remove test_func which was for debugging purposes
-void test_func(std::vector<std::string>& x) { Djinni::Runtime::echo = x[1]; }
 
 namespace Djinni {
 namespace Commandline {
@@ -35,8 +33,6 @@ namespace Commandline {
 // Initialize the command line session
 void Djinni::Commandline::init_commandline()
 {
-    // TODO: remove the temp. test command
-    Djinni::Commandline::command_list.push_back(std::make_tuple("test", &test_func));
 
     // Set all the variables to default values
     command = "";
