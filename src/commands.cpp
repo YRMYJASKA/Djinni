@@ -7,6 +7,7 @@
 #include <commands.hpp>
 #include <runtime.hpp>
 #include <screen.hpp>
+#include <version.h>
 
 // Template function
 // This is the form which ALL command line commands should be written in
@@ -71,6 +72,12 @@ void rename_func(std::vector<std::string>& c_args)
         Djinni::Screen::echo_print("Renamed \"" + old + "\" -> \"" + c_args[1] + "\"", 2);
     }
 }
+
+void version_func(std::vector<std::string>& c_args)
+{
+    Djinni::Screen::echo_print(VERSION_STRING, 0);
+}
+
 namespace Djinni {
 // The core commands of the Djinni editor which will be loaded to the
 // 'command_list' on start up
@@ -85,5 +92,6 @@ void init_core_commands()
     core_commands.push_back(std::make_tuple("open", &open_func));
     core_commands.push_back(std::make_tuple("quit", &quit_func));
     core_commands.push_back(std::make_tuple("rename", &rename_func));
+    core_commands.push_back(std::make_tuple("version", &version_func));
 }
 }

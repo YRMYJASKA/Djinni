@@ -101,7 +101,9 @@ void Djinni::Commandline::commandline_routine()
         Djinni::Screen::update_screen();
 
         // Draw the current status of the command line (AKA user's input)
+        attron(COLOR_PAIR(4));
         mvprintw(Djinni::Screen::MAX_Y - 2, 0, ">");
+        attroff(COLOR_PAIR(4));
         mvprintw(Djinni::Screen::MAX_Y - 2, 1, command.c_str());
 
         // Do an additional move to show the cursor in the proper location
