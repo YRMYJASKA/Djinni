@@ -53,12 +53,10 @@ void Djinni::Screen::update_screen()
     printw("%d, %d", current_buffer->cursor_x + 1, current_buffer->cursor_y + 1);
 
     // Print the echo with the correct colours
-	attron(COLOR_PAIR(Djinni::Runtime::echo_status));
+    attron(COLOR_PAIR(Djinni::Runtime::echo_status));
     mvprintw(MAX_Y - 2, 0, "%s", Djinni::Runtime::echo.c_str());
-	attroff(COLOR_PAIR(Djinni::Runtime::echo_status));
-	Djinni::Runtime::echo_status = 0;
-	Djinni::Runtime::echo = "";
-
+    attroff(COLOR_PAIR(Djinni::Runtime::echo_status));
+    echo_clear();
 
     // Move the cursor to it's correct place and refresh the screen
     move(current_buffer->cursor_y - Djinni::Runtime::line_offset, current_buffer->cursor_x + Djinni::Runtime::line_digits + 3);
@@ -78,7 +76,7 @@ void Djinni::Screen::handle_keypress(int key)
         break;
     // Ctrl-S -> save the current file
     case 19:
-		Djinni::Commandline::process_command("save");
+        Djinni::Commandline::process_command("save");
         break;
     // Ctrl-D -> Open command line for Djinni
     case 4:
@@ -156,4 +154,26 @@ void Djinni::Screen::handle_keypress(int key)
         current_buffer->line_buffer.at(current_buffer->cursor_y).insert(current_buffer->cursor_x, 1, key);
         current_buffer->cursor_x++;
     }
+}
+
+/* echo_print:
+ * a function which is used to print/update the echo status bar
+ * at the bottom to convey information or other prompts
+ *
+ * std::string text:	text to be written 
+ * int mode:			The mode of the printed text (can dictate colour. see 'src/main.cpp')
+ */
+void Djinni::Screen::echo_print(std::string text, int mode)
+{
+    Djinni::Runtime::echo = text;
+    Djinni::Runtime::echo_status = mode;
+}
+
+/* echo_clear:
+ * Clears the echo prompt and resets the status of it
+ */
+void Djinni::Screen::echo_clear()
+{
+    Djinni::Runtime::echo = "";
+    Djinni::Runtime::echo_status = 0;
 }

@@ -20,7 +20,7 @@ void template_func(std::vector<std::string>& c_args)
 void echo_func(std::vector<std::string>& c_args)
 {
     if (c_args.size() > 1) {
-        Djinni::Runtime::echo = c_args[1];
+        Djinni::Screen::echo_print(c_args[1]);
     }
 }
 // save_func:
@@ -35,7 +35,7 @@ void save_func(std::vector<std::string>& c_args)
         name = c_args[1];
     }
     Djinni::Screen::current_buffer->save_file(name);
-    Djinni::Runtime::echo = "Saved to file: \"" + name + "\"";
+    Djinni::Screen::echo_print("Saved to file: \"" + name + "\"", 2);
 }
 // open_func:
 // Opens a file into the current buffer
@@ -43,11 +43,10 @@ void save_func(std::vector<std::string>& c_args)
 void open_func(std::vector<std::string>& c_args)
 {
     if (c_args.size() < 2) {
-        Djinni::Runtime::echo_status = 1;
-        Djinni::Runtime::echo = "open: Please pass a filename.";
+        Djinni::Screen::echo_print("open: Please pass a filename.", 1);
     } else {
         Djinni::Screen::current_buffer->load_file(c_args[1]);
-        Djinni::Runtime::echo = "Opened: \"" + c_args[1] + "\"";
+        Djinni::Screen::echo_print("Opened: \"" + c_args[1] + "\"", 2);
     }
 }
 
@@ -65,11 +64,11 @@ void quit_func(std::vector<std::string>& c_args)
 void rename_func(std::vector<std::string>& c_args)
 {
     if (c_args.size() < 2) {
-        Djinni::Runtime::echo = "rename: Please pass a new name";
+        Djinni::Screen::echo_print("rename: Please pass a new name", 1);
     } else {
         std::string old = Djinni::Screen::current_buffer->get_filename();
         Djinni::Screen::current_buffer->set_filename(c_args[1]);
-        Djinni::Runtime::echo = "Renamed \"" + old + "\" -> \"" + c_args[1] + "\"";
+        Djinni::Screen::echo_print("Renamed \"" + old + "\" -> \"" + c_args[1] + "\"", 2);
     }
 }
 namespace Djinni {

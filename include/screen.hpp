@@ -22,5 +22,7 @@ namespace Screen {
 
     extern void update_screen();
     extern void handle_keypress(int key);
+    extern void echo_print(std::string text, int mode = 0);
+    extern void echo_clear();
 }
 }

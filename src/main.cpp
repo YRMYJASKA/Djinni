@@ -68,7 +68,12 @@ int main(int argc, char* argv[])
     start_color();
 
 	// Initialize the colour pairs
+	// id | Desc.
+	// 0: 	Clean (white on black)
+	// 1: 	Error
+	// 2: 	Success
 	init_pair(1, COLOR_WHITE, COLOR_RED);
+	init_pair(2, COLOR_GREEN, COLOR_BLACK);
 
     // Initialize the line buffer for the file
     Djinni::Screen::current_buffer = &buffer;
