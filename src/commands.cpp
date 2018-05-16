@@ -4,6 +4,7 @@
 #include <tuple>
 #include <vector>
 
+#include <cmdline.hpp>
 #include <commands.hpp>
 #include <runtime.hpp>
 #include <screen.hpp>
@@ -78,6 +79,21 @@ void version_func(std::vector<std::string>& c_args)
     Djinni::Screen::echo_print(VERSION_STRING, 0);
 }
 
+void find_func(std::vector<std::string>& c_args)
+{
+	// WIP
+    std::string word;
+    if (c_args.size() < 2 || c_args[1] == "") {
+        word = Djinni::Commandline::user_input("String to find");
+		if (!strcmp(word.c_str(), "\n")){
+			return;
+		}
+    } else {
+        word = c_args[1];
+    }
+	Djinni::Screen::echo_print(word);
+}
+
 namespace Djinni {
 // The core commands of the Djinni editor which will be loaded to the
 // 'command_list' on start up
@@ -93,5 +109,6 @@ void init_core_commands()
     core_commands.push_back(std::make_tuple("quit", &quit_func));
     core_commands.push_back(std::make_tuple("rename", &rename_func));
     core_commands.push_back(std::make_tuple("version", &version_func));
+    core_commands.push_back(std::make_tuple("find", &find_func));
 }
 }

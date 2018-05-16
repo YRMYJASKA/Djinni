@@ -17,8 +17,6 @@
 namespace Djinni {
 namespace Commandline {
     // Variables for the command line
-    extern std::string command;
-    extern unsigned int cmdline_cursor_pos;
     extern bool cmdline_running;
 
     // command_list: List containing all the possible commands using function pointers
@@ -29,5 +27,6 @@ namespace Commandline {
     extern void commandline_routine();
     extern void process_command(const char* cmd);
     extern void exec_command(std::vector<std::string>& args);
+    extern std::string user_input(const char* prompt = "");
 }
 }

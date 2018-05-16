@@ -7,9 +7,12 @@
  */
 #pragma once
 
+#include <string>
+
 namespace Djinni {
 namespace Miscellaneous {
     extern int digit_num(int x);
     extern void print_help();
+    extern bool file_exists(const std::string& filename);
 }
 }

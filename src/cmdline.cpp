@@ -16,8 +16,6 @@
 namespace Djinni {
 namespace Commandline {
     // Variables for the command line
-    std::string command = "";
-    unsigned int cmdline_cursor_pos = 0;
     bool cmdline_running = true;
     // command_list: List containing all the possible commands using function pointers
     std::vector<std::tuple<const char*, void (*)(std::vector<std::string>&)>> command_list;
@@ -35,10 +33,7 @@ void Djinni::Commandline::init_commandline()
 {
 
     // Set all the variables to default values
-    command = "";
     Djinni::Runtime::echo = "";
-    cmdline_cursor_pos = 0;
-    cmdline_running = true;
 
     // Enter the command line routine
     Djinni::Commandline::commandline_routine();
@@ -96,15 +91,28 @@ void Djinni::Commandline::exec_command(std::vector<std::string>& args)
 // The loop that handles keypresses while the command line is open
 void Djinni::Commandline::commandline_routine()
 {
-    while (cmdline_running) {
-        // Update the screen continiously
+    const char* command = user_input().c_str();
+    if (strcmp(command, "\n")) {
+        process_command(command);
+    }
+}
+
+std::string Djinni::Commandline::user_input(const char* prompt)
+{
+    std::string input = "";
+    unsigned int cmdline_cursor_pos = strlen(prompt);
+    unsigned int input_pos = 0;
+
+    while (true) {
         Djinni::Screen::update_screen();
+        cmdline_cursor_pos = strlen(prompt) + input_pos;
 
         // Draw the current status of the command line (AKA user's input)
-        attron(COLOR_PAIR(4));
-        mvprintw(Djinni::Screen::MAX_Y - 2, 0, ">");
+        attron(COLOR_PAIR(4)); // Appropriate colour for the command prompt
+        mvprintw(Djinni::Screen::MAX_Y - 2, 0, prompt);
+        mvprintw(Djinni::Screen::MAX_Y - 2, strlen(prompt), ">");
         attroff(COLOR_PAIR(4));
-        mvprintw(Djinni::Screen::MAX_Y - 2, 1, command.c_str());
+        mvprintw(Djinni::Screen::MAX_Y - 2, strlen(prompt) + 1, input.c_str());
 
         // Do an additional move to show the cursor in the proper location
         move(Djinni::Screen::MAX_Y - 2, cmdline_cursor_pos + 1);
@@ -115,29 +123,30 @@ void Djinni::Commandline::commandline_routine()
         // ESC || Ctrl-B -> close command line
         case 2:
         case 27:
-            cmdline_running = false;
+            // return a non printable character to indicate that the input has been exited
+            return "\n";
             break;
-        // Enter key -> process command
+        // Enter key -> return the user's input
         case int('\n'):
-            process_command(command.c_str());
+            return input;
             break;
         // Backspace -> delete letter before
         case 127:
         case KEY_BACKSPACE:
-            if (cmdline_cursor_pos > 0) {
-                command.erase(cmdline_cursor_pos - 1, 1);
-                cmdline_cursor_pos--;
+            if (input_pos > 0) {
+                input.erase(input_pos - 1, 1);
+                input_pos--;
             }
             break;
         // Arrow keys -> move to that direction
         case KEY_LEFT:
-            if (cmdline_cursor_pos > 0) {
-                cmdline_cursor_pos--;
+            if (input_pos > 0) {
+                input_pos--;
             }
             break;
         case KEY_RIGHT:
-            if (cmdline_cursor_pos < command.length()) {
-                cmdline_cursor_pos++;
+            if (input_pos < input.length()) {
+                input_pos++;
             }
             break;
         default:
@@ -146,9 +155,9 @@ void Djinni::Commandline::commandline_routine()
                 break;
             }
 
-            // Otherwise append to command string
-            command.insert(cmdline_cursor_pos, 1, k);
-            cmdline_cursor_pos++;
+            // Otherwise append to input string
+            input.insert(input_pos, 1, k);
+            input_pos++;
         }
     }
 }
