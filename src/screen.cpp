@@ -42,16 +42,20 @@ void Djinni::Screen::update_screen()
 
         if (Djinni::Settings::line_numbers) {
             mvprintw(i, 1, "%d", i + Djinni::Runtime::line_offset + 1);
+            mvprintw(i, Djinni::Runtime::line_digits + 2, "%c", ' ');
+            mvprintw(i, Djinni::Runtime::line_digits + 3, "%s", current_buffer->line_buffer[i + Djinni::Runtime::line_offset].c_str());
+        } else {
+            mvprintw(i, 2, "%c", ' ');
+            mvprintw(i, 3, "%s", current_buffer->line_buffer[i + Djinni::Runtime::line_offset].c_str());
         }
-        mvprintw(i, Djinni::Runtime::line_digits + 2, "%c", ' ');
-        mvprintw(i, Djinni::Runtime::line_digits + 3, "%s", current_buffer->line_buffer[i + Djinni::Runtime::line_offset].c_str());
         x++;
     }
 
     // Print the bottom information screen (very minimal and not final)
     mvprintw(MAX_Y - 1, 0, "%s   ", current_buffer->get_filename().c_str());
-    printw("%d, %d", current_buffer->cursor_x + 1, current_buffer->cursor_y + 1);
-
+    if (Djinni::Settings::cursorxy) {
+        printw("%d, %d", current_buffer->cursor_x + 1, current_buffer->cursor_y + 1);
+    }
     // Print the echo with the correct colours
     attron(COLOR_PAIR(Djinni::Runtime::echo_status));
     mvprintw(MAX_Y - 2, 0, "%s", Djinni::Runtime::echo.c_str());

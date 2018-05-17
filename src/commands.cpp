@@ -6,6 +6,7 @@
 
 #include <cmdline.hpp>
 #include <commands.hpp>
+#include <settings.hpp>
 #include <runtime.hpp>
 #include <screen.hpp>
 #include <version.h>
@@ -37,7 +38,7 @@ void save_func(std::vector<std::string>& c_args)
         name = c_args[1];
     }
     Djinni::Screen::current_buffer->save_file(name);
-    Djinni::Screen::echo_print("Saved to file: \"" + name + "\"", 2);
+    Djinni::Screen::echo_print("Saved to file: \"" + name + "\"", SUCCESS_TEXT);
 }
 // open_func:
 // Opens a file into the current buffer
@@ -45,10 +46,10 @@ void save_func(std::vector<std::string>& c_args)
 void open_func(std::vector<std::string>& c_args)
 {
     if (c_args.size() < 2) {
-        Djinni::Screen::echo_print("open: Please pass a filename.", 1);
+        Djinni::Screen::echo_print("open: Please pass a filename.", ERROR_TEXT);
     } else {
         Djinni::Screen::current_buffer->load_file(c_args[1]);
-        Djinni::Screen::echo_print("Opened: \"" + c_args[1] + "\"", 2);
+        Djinni::Screen::echo_print("Opened: \"" + c_args[1] + "\"", SUCCESS_TEXT);
     }
 }
 
@@ -66,11 +67,11 @@ void quit_func(std::vector<std::string>& c_args)
 void rename_func(std::vector<std::string>& c_args)
 {
     if (c_args.size() < 2) {
-        Djinni::Screen::echo_print("rename: Please pass a new name", 1);
+        Djinni::Screen::echo_print("rename: Please pass a new name", ERROR_TEXT);
     } else {
         std::string old = Djinni::Screen::current_buffer->get_filename();
         Djinni::Screen::current_buffer->set_filename(c_args[1]);
-        Djinni::Screen::echo_print("Renamed \"" + old + "\" -> \"" + c_args[1] + "\"", 2);
+        Djinni::Screen::echo_print("Renamed \"" + old + "\" -> \"" + c_args[1] + "\"", SUCCESS_TEXT);
     }
 }
 
@@ -81,17 +82,17 @@ void version_func(std::vector<std::string>& c_args)
 
 void find_func(std::vector<std::string>& c_args)
 {
-	// WIP
+    // WIP
     std::string word;
     if (c_args.size() < 2 || c_args[1] == "") {
         word = Djinni::Commandline::user_input("String to find");
-		if (!strcmp(word.c_str(), "\n")){
-			return;
-		}
+        if (!strcmp(word.c_str(), "\n")) {
+            return;
+        }
     } else {
         word = c_args[1];
     }
-	Djinni::Screen::echo_print(word);
+    Djinni::Screen::echo_print(word);
 }
 
 namespace Djinni {

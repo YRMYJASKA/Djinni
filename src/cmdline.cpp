@@ -12,6 +12,7 @@
 #include <commands.hpp>
 #include <runtime.hpp>
 #include <screen.hpp>
+#include <settings.hpp>
 
 namespace Djinni {
 namespace Commandline {
@@ -108,10 +109,10 @@ std::string Djinni::Commandline::user_input(const char* prompt)
         cmdline_cursor_pos = strlen(prompt) + input_pos;
 
         // Draw the current status of the command line (AKA user's input)
-        attron(COLOR_PAIR(4)); // Appropriate colour for the command prompt
+        attron(COLOR_PAIR(CMD_PROMPT)); // Appropriate colour for the command prompt
         mvprintw(Djinni::Screen::MAX_Y - 2, 0, prompt);
         mvprintw(Djinni::Screen::MAX_Y - 2, strlen(prompt), ">");
-        attroff(COLOR_PAIR(4));
+        attroff(COLOR_PAIR(CMD_PROMPT));
         mvprintw(Djinni::Screen::MAX_Y - 2, strlen(prompt) + 1, input.c_str());
 
         // Do an additional move to show the cursor in the proper location

@@ -34,6 +34,7 @@
 #include <runtime.hpp>
 #include <screen.hpp>
 #include <version.h>
+#include <settings.hpp>
 
 int main(int argc, char* argv[])
 {
@@ -67,17 +68,10 @@ int main(int argc, char* argv[])
     keypad(stdscr, TRUE);
     start_color();
 
-    // Initialize the colour pairs
-    // id | Desc.
-    // 0: 	Clean (white on black)
-    // 1: 	Error
-    // 2: 	Success
-    // 3: 	Warning
-    // 4: 	Command prompt
-    init_pair(1, COLOR_WHITE, COLOR_RED);
-    init_pair(2, COLOR_GREEN, COLOR_BLACK);
-    init_pair(3, COLOR_WHITE, COLOR_YELLOW);
-    init_pair(4, COLOR_CYAN, COLOR_BLACK);
+	// Load the default settings
+	Djinni::Settings::init_settings();
+	// After that load the user made settings in '~/.djinnirc'
+	Djinni::Settings::load_settings("~/.djinnirc");
 
     // Initialize the line buffer for the file
     Djinni::Screen::current_buffer = &buffer;
